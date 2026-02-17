@@ -30,15 +30,17 @@ You now have a complete foundation for your 4-week portfolio project:
 
 ## ✅ What's Complete
 
-### Week 1 (Foundations) — Partially Complete
+### Week 1 (Foundations) — 90% Complete
 - [x] **Design thesis** written (comprehensive philosophy doc)
 - [x] **Project plan** with 4-week timeline
 - [x] **Grammar of Graphics breakdown** for all 6 charts
 - [x] **Full Vega structure guide** (not Vega-Lite)
 - [x] **First working implementation** (time-series line chart)
 - [x] **Reusable config template** (colors, typography, axes)
+- [x] **Color system** documented (categorical, status, sequential, diverging)
+- [x] **Spacing system** documented (4px base unit, all scales)
+- [x] **Axis + grid standards** documented (complete specs)
 - [ ] Visual foundations in Figma (typography, color, spacing)
-- [ ] Axis + grid standards finalized
 
 ---
 
@@ -122,6 +124,9 @@ Each chart in `documentation/chart-grammar-breakdown.md` is decomposed into:
 | `design-thesis.md` | Your design philosophy (use in portfolio case study) |
 | `chart-grammar-breakdown.md` | Implementation specs for all 6 charts |
 | `vega-structure-guide.md` | How Vega works (data → scales → axes → marks) |
+| `color-system.md` | Complete color palette with usage rules |
+| `spacing-system.md` | 4px base unit, all spacing scales |
+| `axis-grid-standards.md` | Axis configuration, grid rules, formatting |
 | `config-template.js` | Reusable styles for consistency |
 | `time-series-line.html` | Working example to learn from |
 

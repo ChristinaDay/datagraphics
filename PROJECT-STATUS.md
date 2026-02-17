@@ -46,11 +46,11 @@ You're building **Operational Data Graphics**, a portfolio project demonstrating
 - [x] Color system defined
 - [x] Typography standards documented (in config-template.js)
 - [x] First chart implemented (time-series line)
+- [x] Spacing system documented
+- [x] Axis + grid standards documented
 - [ ] **TODO:** Create Figma file with visual foundations
-- [ ] **TODO:** Document axis + grid standards formally
-- [ ] **TODO:** Create spacing scale document
 
-**Status:** 70% complete
+**Status:** 90% complete (only Figma work remaining)
 
 ---
 
