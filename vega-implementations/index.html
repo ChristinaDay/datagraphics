@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Operational Data Graphics | Chart Implementations</title>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: #0d0d0d;
+      color: #e5e5e5;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      padding: 60px 40px;
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    header {
+      margin-bottom: 60px;
+    }
+    
+    h1 {
+      font-size: 32px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #f5f5f5;
+    }
+    
+    .tagline {
+      font-size: 16px;
+      color: #888888;
+      margin-bottom: 24px;
+    }
+    
+    .intro {
+      font-size: 14px;
+      color: #a0a0a0;
+      max-width: 700px;
+      line-height: 1.7;
+    }
+    
+    h2 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      color: #f5f5f5;
+      margin-top: 48px;
+    }
+    
+    .chart-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+    
+    .chart-card {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: 24px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    
+    .chart-card:hover {
+      border-color: #60a5fa;
+      transform: translateY(-2px);
+    }
+    
+    .chart-card.implemented {
+      border-color: #34d399;
+    }
+    
+    .chart-card.implemented:hover {
+      border-color: #10b981;
+    }
+    
+    .chart-number {
+      display: inline-block;
+      background: #2a2a2a;
+      color: #888888;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .chart-card.implemented .chart-number {
+      background: #34d399;
+      color: #0d0d0d;
+    }
+    
+    .chart-card h3 {
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: #f5f5f5;
+    }
+    
+    .chart-card p {
+      font-size: 13px;
+      color: #888888;
+      line-height: 1.6;
+    }
+    
+    .status {
+      font-size: 12px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #2a2a2a;
+      color: #6b7280;
+    }
+    
+    .chart-card.implemented .status {
+      color: #34d399;
+    }
+    
+    .resources {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: 32px;
+      margin-top: 48px;
+    }
+    
+    .resources h2 {
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+    
+    .resources ul {
+      list-style: none;
+      font-size: 14px;
+    }
+    
+    .resources li {
+      margin-bottom: 12px;
+      color: #a0a0a0;
+    }
+    
+    .resources li::before {
+      content: "→ ";
+      color: #60a5fa;
+      margin-right: 8px;
+    }
+    
+    .resources a {
+      color: #60a5fa;
+      text-decoration: none;
+    }
+    
+    .resources a:hover {
+      text-decoration: underline;
+    }
+    
+    .principles {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+    
+    .principle {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 6px;
+      padding: 16px;
+    }
+    
+    .principle h4 {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #60a5fa;
+    }
+    
+    .principle p {
+      font-size: 12px;
+      color: #888888;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Operational Data Graphics</h1>
+      <p class="tagline">A Modern Visualization System for Data Infrastructure</p>
+      <p class="intro">
+        High-signal, low-noise data graphics designed for data engineers, analytics engineers, 
+        and infrastructure teams. Built with full Vega to demonstrate systems-level design thinking 
+        and implementation credibility.
+      </p>
+    </header>
+    
+    <section>
+      <h2>Chart Primitives</h2>
+      
+      <div class="chart-grid">
+        <a href="time-series-line.html" class="chart-card implemented">
+          <span class="chart-number">Chart 01</span>
+          <h3>High-Density Time-Series Line</h3>
+          <p>Continuous metric trends over time with minimal visual noise. Perfect for CPU, memory, latency monitoring.</p>
+          <div class="status">✓ Implemented</div>
+        </a>
+        
+        <div class="chart-card">
+          <span class="chart-number">Chart 02</span>
+          <h3>Multi-Series Comparison Line</h3>
+          <p>Compare 2-5 related metrics simultaneously. Environment comparison, regional metrics, service health.</p>
+          <div class="status">Coming soon</div>
+        </div>
+        
+        <div class="chart-card">
+          <span class="chart-number">Chart 03</span>
+          <h3>Stacked Area Trend</h3>
+          <p>Part-to-whole relationships over time. Resource allocation, traffic sources, error breakdown by type.</p>
+          <div class="status">Coming soon</div>
+        </div>
+        
+        <div class="chart-card">
+          <span class="chart-number">Chart 04</span>
+          <h3>Histogram / Distribution</h3>
+          <p>Frequency distribution of continuous variables. Latency percentiles, request sizes, error patterns.</p>
+          <div class="status">Coming soon</div>
+        </div>
+        
+        <div class="chart-card">
+          <span class="chart-number">Chart 05</span>
+          <h3>Throughput Bar Comparison</h3>
+          <p>Discrete quantity comparison across categories. Pipeline throughput, API volume, job completion rates.</p>
+          <div class="status">Coming soon</div>
+        </div>
+        
+        <div class="chart-card">
+          <span class="chart-number">Chart 06</span>
+          <h3>Status Timeline (Health Bands)</h3>
+          <p>System health states over time. Service uptime, incident timelines, deployment status visualization.</p>
+          <div class="status">Coming soon</div>
+        </div>
+      </div>
+    </section>
+    
+    <section>
+      <h2>Design Principles</h2>
+      <div class="principles">
+        <div class="principle">
+          <h4>Signal Over Noise</h4>
+          <p>Every element must justify its existence. Remove anything that doesn't help understand the data.</p>
+        </div>
+        
+        <div class="principle">
+          <h4>Density Over Whitespace</h4>
+          <p>Operational users scan for patterns. Show more data with tighter, purposeful spacing.</p>
+        </div>
+        
+        <div class="principle">
+          <h4>Semantic Color</h4>
+          <p>Color indicates meaning (status, category, threshold) — never decoration.</p>
+        </div>
+        
+        <div class="principle">
+          <h4>Dark Mode First</h4>
+          <p>Infrastructure teams work in terminals and dark UIs. Design natively for dark backgrounds.</p>
+        </div>
+        
+        <div class="principle">
+          <h4>Purposeful Motion</h4>
+          <p>Transitions communicate state changes, not style. Motion must reinforce stability.</p>
+        </div>
+        
+        <div class="principle">
+          <h4>Accessible Always</h4>
+          <p>Keyboard navigation, ARIA labels, sufficient contrast, non-color signaling.</p>
+        </div>
+      </div>
+    </section>
+    
+    <section class="resources">
+      <h2>Documentation & Resources</h2>
+      <ul>
+        <li><a href="../README.md">Project Overview & Philosophy</a></li>
+        <li><a href="../documentation/design-thesis.md">Design Thesis</a> — Why operational graphics need better design</li>
+        <li><a href="../documentation/chart-grammar-breakdown.md">Grammar of Graphics Breakdown</a> — All 6 charts deconstructed</li>
+        <li><a href="../documentation/vega-structure-guide.md">Vega Structure Guide</a> — How to build Vega specs</li>
+        <li><a href="../documentation/vega-vs-vega-lite.md">Vega vs Vega-Lite</a> — Why full Vega for this project</li>
+        <li><a href="config-template.js">Config Template</a> — Reusable configuration for all charts</li>
+      </ul>
+    </section>
+  </div>
+</body>
+</html>

@@ -1,0 +1,64 @@
+---
+alwaysApply: true
+---
+
+# Operational Data Graphics: Project Brief
+
+## Project Intent
+This is a **portfolio project** to demonstrate systems-level design thinking for a Senior Data Graphics Designer / Design Engineer role. This is NOT a production BI tool — it's a visual grammar + implementation proof.
+
+## Target Audience
+- Data engineers
+- Analytics engineers  
+- Infrastructure / platform teams
+- Technical PMs
+
+Users who work with time-series, operational metrics, and care about reliability over decoration.
+
+## Core Philosophy
+Evoke: **Calm, Precision, Trust, Stability, Restraint**
+
+Avoid: Decorative noise, over-animation, over-saturated color, marketing aesthetics
+
+Think: Infrastructure-grade UI, functional motion, deterministic behavior
+
+## Deliverables
+1. **Design thesis** (written philosophy)
+2. **Visual foundations** (typography, color, spacing, axis/grid rules)
+3. **6 chart primitives** (designed + documented)
+4. **4 charts implemented** (Vega/JS/SVG)
+5. **Interaction & motion standards**
+6. **GitHub repo + case study**
+
+## Timeline
+- **Week 1**: Philosophy + visual foundations
+- **Week 2**: Chart primitives designed
+- **Week 3**: Implement 4 charts in Vega
+- **Week 4**: Case study + polish demo
+
+## Design Principles
+1. Maximize signal, minimize noise
+2. Prioritize density over whitespace
+3. Use color sparingly and semantically
+4. Design for dark mode first
+5. Motion must have purpose
+6. Accessibility is non-negotiable
+7. Consistency builds trust
+
+## Technology
+- **Vega / Vega-Lite** for charts
+- **SVG** for rendering
+- **Vanilla JavaScript** for interactivity
+- **Figma** for design standards
+
+## What Success Looks Like
+- Demonstrates systems thinking
+- Shows implementation credibility
+- Signals senior-level design expertise
+- Clearly different from generic dashboards
+- Portfolio-ready in 4 weeks
+
+## Reference Files
+- [README.md](mdc:README.md)
+- [Design Thesis](mdc:documentation/design-thesis.md)
+- [Project Plan](mdc:documentation/project-plan.md)

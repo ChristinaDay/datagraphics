@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Time-Series Line Chart | Operational Data Graphics</title>
+  
+  <!-- Vega -->
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: #0d0d0d;
+      color: #e5e5e5;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      padding: 40px;
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #f5f5f5;
+    }
+    
+    .subtitle {
+      font-size: 14px;
+      color: #888888;
+      margin-bottom: 32px;
+    }
+    
+    .chart-container {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+    
+    .chart-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: #a0a0a0;
+      margin-bottom: 16px;
+    }
+    
+    #chart {
+      width: 100%;
+    }
+    
+    .specs {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: 24px;
+    }
+    
+    .specs h2 {
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 16px;
+      color: #f5f5f5;
+    }
+    
+    .specs ul {
+      list-style: none;
+      font-size: 13px;
+      color: #a0a0a0;
+      line-height: 1.8;
+    }
+    
+    .specs li::before {
+      content: "→ ";
+      color: #60a5fa;
+      margin-right: 8px;
+    }
+    
+    code {
+      background: #0d0d0d;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'JetBrains Mono', 'Consolas', monospace;
+      font-size: 12px;
+      color: #60a5fa;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>High-Density Time-Series Line Chart</h1>
+    <p class="subtitle">Chart Primitive #1 — Operational Data Graphics</p>
+    
+    <div class="chart-container">
+      <div class="chart-title">CPU Usage Over Time (Last 24 Hours)</div>
+      <div id="chart"></div>
+    </div>
+    
+    <div class="specs">
+      <h2>Chart Specifications</h2>
+      <ul>
+        <li><strong>Mark:</strong> <code>line</code> (1.5px stroke, no points)</li>
+        <li><strong>Color:</strong> <code>#60a5fa</code> (muted blue)</li>
+        <li><strong>Gridlines:</strong> Horizontal only, <code>#2a2a2a</code> at 50% opacity</li>
+        <li><strong>Typography:</strong> Sans-serif for labels, monospace for numbers</li>
+        <li><strong>Background:</strong> <code>#1a1a1a</code> (dark mode first)</li>
+        <li><strong>Zero baseline:</strong> No (CPU % doesn't need zero)</li>
+        <li><strong>Interaction:</strong> Hover to dim line (demonstrates state change)</li>
+      </ul>
+    </div>
+  </div>
+  
+  <script>
+    // Generate sample data (24 hours of CPU usage)
+    function generateTimeSeriesData() {
+      const data = [];
+      const now = new Date();
+      const hoursAgo = 24;
+      
+      for (let i = hoursAgo; i >= 0; i--) {
+        const time = new Date(now.getTime() - (i * 60 * 60 * 1000));
+        const baseValue = 45;
+        const variation = Math.sin(i / 3) * 15 + Math.random() * 10;
+        const value = Math.max(10, Math.min(90, baseValue + variation));
+        
+        data.push({
+          timestamp: time.toISOString(),
+          value: Math.round(value * 10) / 10
+        });
+      }
+      
+      return data;
+    }
+    
+    // Vega specification
+    const spec = {
+      "$schema": "https://vega.github.io/schema/vega/v5.json",
+      "description": "High-density time-series line chart for operational metrics",
+      
+      "width": 1000,
+      "height": 240,
+      "padding": {"top": 10, "left": 60, "right": 20, "bottom": 40},
+      "background": "#1a1a1a",
+      "autosize": {"type": "fit", "contains": "padding"},
+      
+      // DATA
+      "data": [
+        {
+          "name": "metrics",
+          "values": generateTimeSeriesData(),
+          "transform": [
+            {
+              "type": "formula",
+              "expr": "toDate(datum.timestamp)",
+              "as": "time"
+            }
+          ]
+        }
+      ],
+      
+      // SCALES
+      "scales": [
+        {
+          "name": "x",
+          "type": "time",
+          "range": "width",
+          "domain": {"data": "metrics", "field": "time"}
+        },
+        {
+          "name": "y",
+          "type": "linear",
+          "range": "height",
+          "nice": true,
+          "zero": false,
+          "domain": {"data": "metrics", "field": "value"}
+        }
+      ],
+      
+      // AXES
+      "axes": [
+        {
+          "orient": "bottom",
+          "scale": "x",
+          "title": null,
+          
+          "grid": false,
+          "gridColor": "#2a2a2a",
+          "gridOpacity": 0.5,
+          
+          "labelColor": "#888888",
+          "labelFont": "Inter, system-ui, sans-serif",
+          "labelFontSize": 10,
+          "labelPadding": 8,
+          "labelFlush": true,
+          
+          "tickColor": "#2a2a2a",
+          "tickSize": 5,
+          "tickCount": 8,
+          
+          "domainColor": "#2a2a2a",
+          "domainWidth": 1,
+          
+          "format": "%I:%M %p"
+        },
+        {
+          "orient": "left",
+          "scale": "y",
+          "title": "CPU Usage (%)",
+          "titleColor": "#a0a0a0",
+          "titleFont": "Inter, system-ui, sans-serif",
+          "titleFontSize": 11,
+          "titlePadding": 12,
+          "titleFontWeight": 500,
+          
+          "grid": true,
+          "gridColor": "#2a2a2a",
+          "gridOpacity": 0.5,
+          "gridDash": [1, 3],
+          
+          "labelColor": "#888888",
+          "labelFont": "JetBrains Mono, Consolas, Monaco, monospace",
+          "labelFontSize": 10,
+          "labelPadding": 8,
+          
+          "tickColor": "#2a2a2a",
+          "tickSize": 5,
+          "tickCount": 5,
+          
+          "domainColor": "#2a2a2a",
+          "domainWidth": 1
+        }
+      ],
+      
+      // MARKS
+      "marks": [
+        {
+          "type": "line",
+          "name": "line",
+          "from": {"data": "metrics"},
+          "encode": {
+            "enter": {
+              "x": {"scale": "x", "field": "time"},
+              "y": {"scale": "y", "field": "value"},
+              "stroke": {"value": "#60a5fa"},
+              "strokeWidth": {"value": 1.5},
+              "strokeCap": {"value": "round"},
+              "strokeJoin": {"value": "round"}
+            },
+            "update": {
+              "opacity": {"value": 1}
+            },
+            "hover": {
+              "opacity": {"value": 0.7}
+            }
+          }
+        },
+        
+        // Invisible hover target (wider than line for easier interaction)
+        {
+          "type": "line",
+          "from": {"data": "metrics"},
+          "encode": {
+            "enter": {
+              "x": {"scale": "x", "field": "time"},
+              "y": {"scale": "y", "field": "value"},
+              "stroke": {"value": "transparent"},
+              "strokeWidth": {"value": 20}
+            }
+          }
+        }
+      ]
+    };
+    
+    // Render chart
+    const view = new vega.View(vega.parse(spec))
+      .renderer('svg')
+      .initialize('#chart')
+      .hover()
+      .run();
+    
+    // Make responsive
+    window.addEventListener('resize', () => {
+      view.resize().run();
+    });
+  </script>
+</body>
+</html>
