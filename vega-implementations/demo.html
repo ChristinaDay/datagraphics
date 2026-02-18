@@ -13,22 +13,51 @@
       box-sizing: border-box;
     }
     
+    /* Theme Variables */
+    :root {
+      /* Light Mode (default) */
+      --bg-canvas: #ffffff;
+      --bg-chart: #f9fafb;
+      --bg-elevated: #f3f4f6;
+      --text-primary: #1a1a1a;
+      --text-secondary: #6b7280;
+      --text-muted: #9ca3af;
+      --border-default: #e5e7eb;
+      --border-grid: #d1d5db;
+      --shadow: rgba(0, 0, 0, 0.1);
+    }
+    
+    :root[data-theme="dark"] {
+      /* Dark Mode */
+      --bg-canvas: #0D0D0E;
+      --bg-chart: #171719;
+      --bg-elevated: #2a2a2a;
+      --text-primary: #D9D9E0;
+      --text-secondary: #999AA6;
+      --text-muted: #6b7280;
+      --border-default: #33353A;
+      --border-grid: #4D4E56;
+      --shadow: rgba(0, 0, 0, 0.5);
+    }
+    
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #0D0D0E;
-      color: #D9D9E0;
+      background: var(--bg-canvas);
+      color: var(--text-primary);
       line-height: 1.6;
+      transition: background 0.3s ease, color 0.3s ease;
     }
     
     /* Sticky Navigation */
     nav {
       position: sticky;
       top: 0;
-      background: rgba(13, 13, 14, 0.95);
+      background: var(--bg-canvas);
       backdrop-filter: blur(10px);
-      border-bottom: 1px solid #33353A;
+      border-bottom: 1px solid var(--border-default);
       padding: 1rem 2rem;
       z-index: 100;
+      transition: background 0.3s ease, border-color 0.3s ease;
     }
     
     nav .container {
@@ -42,16 +71,17 @@
     nav h1 {
       font-size: 1.125rem;
       font-weight: 500;
-      color: #D9D9E0;
+      color: var(--text-primary);
     }
     
     nav .links {
       display: flex;
       gap: 1.5rem;
+      align-items: center;
     }
     
     nav a {
-      color: #999AA6;
+      color: var(--text-secondary);
       text-decoration: none;
       font-size: 0.875rem;
       transition: color 0.2s;
@@ -65,6 +95,38 @@
       color: #3B82F5;
     }
     
+    /* Theme Toggle */
+    .theme-toggle {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-default);
+      border-radius: 20px;
+      padding: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.3s ease;
+    }
+    
+    .theme-toggle:hover {
+      border-color: #3B82F5;
+    }
+    
+    .theme-option {
+      padding: 4px 12px;
+      border-radius: 14px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .theme-option.active {
+      background: #3B82F5;
+      color: white;
+    }
+    
     /* Main Content */
     main {
       max-width: 1400px;
@@ -75,19 +137,19 @@
     .hero {
       margin-bottom: 4rem;
       padding-bottom: 3rem;
-      border-bottom: 1px solid #33353A;
+      border-bottom: 1px solid var(--border-default);
     }
     
     .hero h2 {
       font-size: 2.5rem;
       font-weight: 600;
       margin-bottom: 1rem;
-      color: #D9D9E0;
+      color: var(--text-primary);
     }
     
     .hero p {
       font-size: 1.125rem;
-      color: #999AA6;
+      color: var(--text-secondary);
       max-width: 700px;
       line-height: 1.7;
     }
@@ -105,7 +167,7 @@
     .chart-number {
       display: inline-block;
       background: #22BF4A;
-      color: #0D0D0E;
+      color: white;
       font-size: 0.75rem;
       font-weight: 600;
       padding: 4px 10px;
@@ -119,19 +181,20 @@
       font-size: 1.75rem;
       font-weight: 500;
       margin-bottom: 0.5rem;
-      color: #D9D9E0;
+      color: var(--text-primary);
     }
     
     .chart-header p {
-      color: #999AA6;
+      color: var(--text-secondary);
       font-size: 0.95rem;
     }
     
     .chart-container {
-      background: #171719;
-      border: 1px solid #33353A;
+      background: var(--bg-chart);
+      border: 1px solid var(--border-default);
       border-radius: 8px;
       padding: 2rem;
+      transition: background 0.3s ease, border-color 0.3s ease;
     }
     
     /* Simulation Controls */
@@ -186,7 +249,7 @@
     }
     
     .sim-status {
-      color: #999AA6;
+      color: var(--text-secondary);
       font-size: 13px;
       display: flex;
       align-items: center;
@@ -236,9 +299,9 @@
       max-width: 1400px;
       margin: 0 auto;
       padding: 3rem 2rem;
-      border-top: 1px solid #33353A;
+      border-top: 1px solid var(--border-default);
       text-align: center;
-      color: #999AA6;
+      color: var(--text-secondary);
       font-size: 0.875rem;
     }
     
@@ -282,6 +345,10 @@
         <a href="#chart2">Multi-Series</a>
         <a href="#chart4">Histogram</a>
         <a href="#chart6">Status Timeline</a>
+        <div class="theme-toggle">
+          <div class="theme-option active" onclick="setTheme('light')" id="theme-light">☀️ Light</div>
+          <div class="theme-option" onclick="setTheme('dark')" id="theme-dark">🌙 Dark</div>
+        </div>
         <a href="index.html">← All Charts</a>
       </div>
     </div>
@@ -921,6 +988,87 @@
           link.classList.add('active');
         }
       });
+    });
+
+    // ========================================
+    // THEME SWITCHING
+    // ========================================
+    
+    // Set initial theme (default to light)
+    let currentTheme = 'light';
+    
+    function setTheme(theme) {
+      currentTheme = theme;
+      const root = document.documentElement;
+      root.setAttribute('data-theme', theme);
+      
+      // Update toggle buttons
+      document.getElementById('theme-light').classList.toggle('active', theme === 'light');
+      document.getElementById('theme-dark').classList.toggle('active', theme === 'dark');
+      
+      // Save preference
+      localStorage.setItem('theme', theme);
+      
+      // Update all charts with new theme
+      updateChartsTheme(theme);
+    }
+    
+    function updateChartsTheme(theme) {
+      const colors = theme === 'dark' ? {
+        background: '#171719',
+        textPrimary: '#D9D9E0',
+        textSecondary: '#999AA6',
+        grid: '#4D4E56',
+        tick: '#4D4E56'
+      } : {
+        background: '#f9fafb',
+        textPrimary: '#1a1a1a',
+        textSecondary: '#6b7280',
+        grid: '#d1d5db',
+        tick: '#d1d5db'
+      };
+      
+      // Update Chart 1
+      spec1.background = colors.background;
+      spec1.axes[0].labelColor = colors.textSecondary;
+      spec1.axes[0].tickColor = colors.tick;
+      spec1.axes[1].labelColor = colors.textSecondary;
+      spec1.axes[1].tickColor = colors.tick;
+      spec1.axes[1].gridColor = colors.grid;
+      vegaEmbed('#vis1', spec1, { actions: false, tooltip: { theme: theme === 'dark' ? 'dark' : 'light' } });
+      
+      // Update Chart 2
+      spec2.background = colors.background;
+      spec2.axes[0].labelColor = colors.textSecondary;
+      spec2.axes[0].tickColor = colors.tick;
+      spec2.axes[1].labelColor = colors.textSecondary;
+      spec2.axes[1].tickColor = colors.tick;
+      spec2.axes[1].gridColor = colors.grid;
+      spec2.legends[0].labelColor = colors.textPrimary;
+      vegaEmbed('#vis2', spec2, { actions: false, tooltip: { theme: theme === 'dark' ? 'dark' : 'light' } });
+      
+      // Update Chart 4
+      spec4.background = colors.background;
+      spec4.axes[0].labelColor = colors.textSecondary;
+      spec4.axes[0].tickColor = colors.tick;
+      spec4.axes[1].labelColor = colors.textSecondary;
+      spec4.axes[1].tickColor = colors.tick;
+      spec4.axes[1].gridColor = colors.grid;
+      vegaEmbed('#vis4', spec4, { actions: false, tooltip: { theme: theme === 'dark' ? 'dark' : 'light' } });
+      
+      // Update Chart 6
+      spec6.background = colors.background;
+      spec6.axes[0].labelColor = colors.textSecondary;
+      spec6.axes[0].tickColor = colors.textSecondary;
+      spec6.axes[1].labelColor = colors.textPrimary;
+      spec6.legends[0].labelColor = colors.textPrimary;
+      vegaEmbed('#vis6', spec6, { actions: false, tooltip: { theme: theme === 'dark' ? 'dark' : 'light' } });
+    }
+    
+    // Load saved theme on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      setTheme(savedTheme);
     });
 
     // ========================================
