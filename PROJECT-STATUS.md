@@ -1,7 +1,7 @@
 # Project Status: Operational Data Graphics
 
 **Last Updated:** February 17, 2026  
-**Phase:** Week 3 Complete — Moving to Week 4 (Case Study & Polish)
+**Phase:** Week 4 ~95% Complete — Final Polish & Screenshots
 
 ---
 
@@ -15,7 +15,7 @@ You're building **Operational Data Graphics**, a portfolio project demonstrating
 
 ## ✅ Completed Deliverables
 
-### Documentation (13 files)
+### Documentation (19 files)
 1. **README.md** — Project overview, principles, roadmap
 2. **GETTING-STARTED.md** — Quick start guide for development
 3. **PROJECT-STATUS.md** — This file (tracking progress)
@@ -29,9 +29,12 @@ You're building **Operational Data Graphics**, a portfolio project demonstrating
 11. **documentation/axis-grid-standards.md** — Formal specifications for axis and grid behavior
 12. **documentation/interaction-patterns.md** — Comprehensive interaction and motion standards
 13. **documentation/chart-usage-guidelines.md** — When to use each chart type with decision tree
-14. **documentation/project-journal.md** — Complete development log with technical discoveries
+14. **documentation/project-journal.md** — Complete development log with technical discoveries ✨
 15. **documentation/figma-guide.md** — Step-by-step Figma setup instructions
 16. **documentation/figma-connection-setup.md** — TalkToFigma plugin configuration
+17. **documentation/theming-system.md** — Light/dark mode implementation guide ✨ NEW
+18. **documentation/case-study.md** — Portfolio case study (markdown version) ✨ NEW
+19. **documentation/case-study.html** — Portfolio case study (styled HTML version) ✨ NEW
 
 ### Implementation (6 files) 
 1. **vega-implementations/index.html** — Demo landing page with implementation status
@@ -44,7 +47,8 @@ You're building **Operational Data Graphics**, a portfolio project demonstrating
 
 ### Design Assets
 1. **design/tokens.json** — W3C-format design tokens for Figma import
-2. **Figma File: Visual Foundations & Standards** — Complete design system with:
+2. **design/tokens-with-modes.json** — Design tokens with light/dark mode support ✨ NEW
+3. **Figma File: Visual Foundations & Standards** — Complete design system with:
    - Color variables imported
    - Typography styles created
    - Spacing system board
@@ -114,18 +118,21 @@ You're building **Operational Data Graphics**, a portfolio project demonstrating
 
 ---
 
-### Week 4: Documentation + Polish 🔄 IN PROGRESS
+### Week 4: Documentation + Polish ✅ ~95% COMPLETE
 - [x] Update project journal with Week 3 progress
-- [ ] Write portfolio case study (problem → process → solution)
-- [ ] Update README with final project overview
+- [x] Add interactive real-time simulations to all 4 charts ✨
+- [x] Implement complete light/dark mode theming system ✨
+- [x] Create design tokens with mode support ✨
+- [x] Add system preference detection and OS theme listening ✨
+- [x] Document theming system implementation ✨
+- [x] Write portfolio case study (markdown + HTML versions) ✨
+- [x] Update project journal with Sessions 5 & 6 ✨
+- [x] Update PROJECT-STATUS.md with final deliverables
+- [ ] Update README with final project showcase
 - [ ] Take high-quality screenshots of demo page
-- [ ] Write reflection / learnings section
-- [ ] Document implementation patterns discovered
-- [ ] Prepare interview talking points
-- [ ] Polish GitHub README for public viewing
-- [ ] Create portfolio presentation structure
+- [ ] Final commit and push to GitHub
 
-**Status:** 10% complete (Week 4 just started)
+**Status:** ~95% complete (Case study done, screenshots + README polish remaining)
 
 ---
 
@@ -204,6 +211,9 @@ You're building **Operational Data Graphics**, a portfolio project demonstrating
 │   ├── axis-grid-standards.md ✨
 │   ├── figma-guide.md ✨
 │   ├── figma-connection-setup.md ✨
+│   ├── theming-system.md ✨ NEW
+│   ├── case-study.md ✨ NEW (markdown version)
+│   ├── case-study.html ✨ NEW (styled HTML)
 │   └── github-setup.md
 │
 ├── /vega-implementations
@@ -226,32 +236,31 @@ Figma: "Visual Foundations & Standards" (external)
 
 ---
 
-## 🎯 Immediate Next Steps (Week 4)
+## 🎯 Immediate Next Steps (Final Polish)
 
 ### 1. View the Full Demo ✨
 Open `vega-implementations/demo.html` in your browser to see:
 - All 4 charts on one scrollable page
 - Sticky navigation with jump links
-- Full Vega implementations with dark mode
+- **Real-time simulation controls** ✨ NEW
+- **Light/dark mode toggle** ✨ NEW
 - Interactive tooltips and hover effects
 - Production-ready portfolio showcase
 
-### 2. Write Case Study
-Create `documentation/case-study.md` with:
-- **Problem**: Why operational dashboards need better graphics
-- **Audience**: Data engineers, analytics engineers, infrastructure teams
-- **Process**: Grammar of Graphics → Design System → Implementation
-- **Design Decisions**: Color, spacing, interaction patterns
-- **Outcomes**: 6 designed, 4 implemented, spacing standards applied
-- **Learnings**: Full Vega vs Vega-Lite, design-to-code translation
+### 2. Read the Case Study ✅ COMPLETE
+Two versions created:
+- **Markdown**: `documentation/case-study.md` (~1,200 words)
+- **HTML**: `documentation/case-study.html` (styled, responsive)
+- Covers: Problem, Approach, Process, Outcomes, Learnings, Reflection
 
-### 3. Take Screenshots
+### 3. Take Screenshots (Remaining)
 Capture high-quality screenshots:
-- Full demo page (all 4 charts)
+- Full demo page (dark mode)
+- Full demo page (light mode) ✨
+- Chart simulations in action ✨
 - Individual chart close-ups
 - Figma design file overview
-- Design system documentation pages
-- For portfolio presentation and GitHub README
+- For README and portfolio presentation
 
 ---
 
@@ -268,6 +277,20 @@ Capture high-quality screenshots:
 2. **Grammar of Graphics**: Theory-grounded approach
 3. **Audience clarity**: Designed for operational users (not generic BI)
 4. **Implementation proof**: Working code, not just mockups
+5. **Interactive demos**: Real-time simulations show operational scenarios ✨ NEW
+6. **Theming system**: Complete light/dark mode with system detection ✨ NEW
+7. **Portfolio-ready**: Case study + polished demo page ✨ NEW
+
+### Exceeded Expectations
+**Week 4 went beyond the original plan:**
+- Added interactive simulations (not in original scope)
+- Built complete theming system (light + dark modes)
+- Auto-detects user system preferences
+- Dynamic Vega chart updates on theme change
+- 50+ CSS variables for consistency
+- localStorage persistence + OS theme listening
+
+**Result**: Project is now significantly more impressive than initially planned.
 
 ### Risks to Watch
 1. **Overbuilding**: Stay focused on 6 charts, not a full library
@@ -280,13 +303,15 @@ Capture high-quality screenshots:
 
 | Metric | Target | Current | Status |
 |--------|--------|---------|--------|
-| Documentation files | 13 files | 16 files | ✅ 123% |
+| Documentation files | 13 files | 19 files | ✅ 146% |
 | Design thesis | 1 doc | 1 doc | ✅ Complete |
 | Charts designed | 6 charts | 6 charts | ✅ Complete |
 | Charts implemented | 4 charts | 4 charts | ✅ Complete |
-| Vega code lines | ~1500 lines | ~1535 lines | ✅ Complete |
+| Vega code lines | ~1500 lines | ~2000 lines | ✅ 133% |
 | Demo page | 1 page | 1 page | ✅ Complete |
-| Case study | 1 doc | 0 docs | ⏳ Pending |
+| Interactive features | 0 | 4 simulations | ✅ Exceeded |
+| Theming system | 0 | Light/Dark | ✅ Exceeded |
+| Case study | 1 doc | 2 versions | ✅ Complete |
 
 ---
 
@@ -347,10 +372,10 @@ Capture high-quality screenshots:
 | **Week 1** | Philosophy + Foundations | ✅ 100% Complete |
 | **Week 2** | Design 6 charts | ✅ 100% Complete |
 | **Week 3** | Implement 4 charts | ✅ 100% Complete |
-| **Week 4** | Case study + polish | 🔄 10% (In Progress) |
+| **Week 4** | Case study + polish | ✅ ~95% Complete |
 
 **Target Completion:** February 2026  
-**Actual Progress:** Weeks 1-3 complete ahead of schedule!
+**Actual Progress:** All core deliverables complete! Simulations + theming exceeded expectations.
 
 ---
 
@@ -368,4 +393,12 @@ When writing your portfolio case study, emphasize:
 
 ---
 
-**Status Summary:** 🎉 Weeks 1-3 Complete! Project is 75% done. All charts designed and 4/6 implemented in Vega with proper spacing standards. Ready for final polish and case study writing in Week 4.
+**Status Summary:** 🎉 Project 95% Complete! All core deliverables finished:
+- ✅ 6 charts designed in Figma
+- ✅ 4 charts implemented in Vega with spacing standards
+- ✅ Interactive simulations for operational scenarios
+- ✅ Complete light/dark mode theming system
+- ✅ Case study written (markdown + HTML)
+- ⏳ Final polish: Screenshots + README update
+
+**Ready for portfolio presentation!**
