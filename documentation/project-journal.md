@@ -505,6 +505,243 @@ This project now demonstrates:
 
 ---
 
+## Session 3: Chart Refinement & Quality Control
+**Date**: February 17, 2026
+
+### Overview
+
+After initial chart creation, conducted comprehensive quality review of all 6 chart primitives in Figma, identifying and fixing discrepancies to ensure production-ready visual quality and consistency across the design system.
+
+### Chart-by-Chart Refinement
+
+#### Chart 1: High-Density Time-Series Line Chart ✅
+**Issues Found:**
+- Missing grid lines (Charts 2-6 had them, Chart 1 didn't)
+- Legend was text-only with symbol characters (■), not actual colored rectangles
+- Spacing inconsistencies compared to other charts
+
+**Fixes Applied:**
+- Deleted all elements and rebuilt from scratch
+- Added 4 horizontal grid lines (40% opacity)
+- Created proper legend with colored rectangles (p50, p95, p99)
+- Applied correct text colors throughout
+- Positioned legend with proper spacing from frame edge
+
+**Node ID Learning Applied:** Successfully caught and fixed node ID mismatch during color application
+
+#### Chart 2: Multi-Series Comparison Line Chart ✅
+**Issues Found:**
+- Legend was text-only, inconsistent with Chart 1's new format
+
+**Fixes Applied:**
+- Deleted text-only legend
+- Created proper legend with 4 colored squares + labels (Auth, API, Database, Cache)
+- Each square matches corresponding line color
+- Consistent spacing and positioning
+
+#### Chart 3: Stacked Area Trend ✅
+**Issues Found:**
+- Text colors incorrect (barely visible)
+- Missing Y-axis tick labels
+- Missing X-axis time labels
+- Bottom area had washed-out beige color (not in color system)
+- Legend was text-only
+
+**Fixes Applied:**
+- Fixed all text colors (title, labels, legend)
+- Fixed grid line colors (subtle gray, 40% opacity)
+- Fixed axis colors (visible gray)
+- Fixed stacked area colors to use proper categorical palette:
+  - Ingest: Blue (40% opacity)
+  - Transform: Green/Cyan (35% opacity)
+  - Enrich: Orange (35% opacity)
+  - Output: Violet (35% opacity)
+- Added Y-axis tick labels (0, 250, 500, 750, 1000)
+- Added X-axis time labels (00:00, 06:00, 12:00, 18:00)
+- Created proper legend with colored squares
+
+#### Chart 4: Histogram / Distribution ✅
+**Issues Found:**
+- Missing Y-axis tick labels (no count scale)
+- Missing grid lines
+
+**Fixes Applied:**
+- Added 4 horizontal grid lines (40% opacity)
+- Added Y-axis tick labels (0, 1000, 2000, 3000, 4000)
+- No legend needed (single data series - correct decision)
+
+**Grid Layer Discussion:**
+- Identified that grid lines were created after bars, placing them on top
+- Discussed grid lines over vs. behind data
+- **Decision:** Keep grid lines OVER bars for operational dashboards
+  - Rationale: Prioritizes precision and readability for engineers
+  - 40% opacity ensures they don't compete with data
+  - Maintains grid as continuous reference tool
+  - Aligns with "functional over decorative" philosophy
+
+#### Chart 5: Throughput Bar Comparison ✅
+**Issues Found:**
+- Missing Y-axis tick labels
+- Missing grid lines
+
+**Fixes Applied:**
+- Added 4 horizontal grid lines (40% opacity)
+- Added Y-axis tick labels (0, 25k, 50k, 75k, 100k)
+- Manually reordered grid lines behind bars in layer panel (user preference)
+- No legend needed (single metric, color differentiates categories)
+
+#### Chart 6: Status Timeline (Health Bands) ✅
+**Issues Found:**
+- Missing time labels on X-axis
+- Legend was text-only
+
+**Fixes Applied:**
+- Added X-axis time labels (0h, 6h, 12h, 18h, 24h)
+- Created proper legend with status-colored squares:
+  - Healthy: Green
+  - Warning: Orange  
+  - Error: Red
+- Positioned legend at bottom center
+
+### Design System Consistency Achieved
+
+All 6 charts now have:
+- ✅ Proper titles with text-primary color
+- ✅ Y-axis and X-axis labels with text-secondary color
+- ✅ Grid lines at 40% opacity (where appropriate)
+- ✅ Tick labels showing scale
+- ✅ Professional legends with colored squares (where appropriate)
+- ✅ Consistent dark mode styling
+- ✅ Proper spacing and positioning
+- ✅ Colors from defined palette
+
+### Technical Process Refinement
+
+**Node ID Management in Practice:**
+- Applied documented checklist: CREATE → GET ID → USE ID → VERIFY
+- Successfully caught multiple node ID mismatches (Charts 4, 5, 6)
+- Used correct returned IDs (20:xxx, 21:xxx) instead of assumed IDs
+- Process now second nature
+
+**Coordinate System Mastery:**
+- All elements created with relative coordinates
+- No positioning issues
+- Clean, predictable results
+
+### Quality Metrics
+
+- **Charts refined**: 6/6
+- **Elements fixed/created**: ~50+ (legends, labels, grid lines)
+- **Color corrections**: 30+ text/shape elements
+- **Time to completion**: ~90 minutes of iterative refinement
+- **Zero positioning errors**: Coordinate system knowledge fully internalized
+
+### Portfolio Impact
+
+The refinement session demonstrates:
+- **Attention to detail**: Caught subtle inconsistencies across charts
+- **Systems thinking**: Identified patterns and applied fixes systematically
+- **Quality standards**: Insisted on proper legends, labels, and consistency
+- **Design judgment**: Made thoughtful decision about grid layer placement
+- **Process discipline**: Applied node ID checklist religiously
+
+This level of polish elevates the project from "working mockups" to "production-ready design system."
+
+---
+
+## Technical Discovery: Node ID Management in TalkToFigma
+
+**Date**: February 17, 2026
+
+### The Problem
+
+When rebuilding Chart 1 after fixing all charts 2-6, we encountered an issue where text elements had incorrect colors applied - titles and labels were nearly invisible because they received grid line colors instead of proper text colors.
+
+### Root Cause
+
+**Node ID Mismatch During Batch Operations**
+
+When creating multiple elements in a single batch of TalkToFigma calls, the returned node IDs from creation operations don't always match the expected sequence. If you try to reference a node by an assumed ID before the creation call completes, you'll apply properties to the wrong elements.
+
+**What Happened in Chart 1**:
+```javascript
+// Created Chart Title - returns ID: 17:351
+// Created Y-Axis Label - returns ID: 17:352  
+// Created Grid Line 1 - returns ID: 17:353
+// Set fill color on 16:351 ❌ (wrong ID, from previous attempt)
+// Set fill color on 16:352 ❌ (wrong ID)
+```
+
+The creation tools returned new IDs (17:xxx), but subsequent `set_fill_color` calls used old IDs (16:xxx) or assumed IDs, causing:
+- Text elements receiving grid line colors
+- Visual elements not getting styled at all
+- Confusion about which elements were successfully modified
+
+### The Solution
+
+**Always Use Returned Node IDs Immediately**
+
+When the TalkToFigma API returns a node ID from a creation operation, **capture that ID and use it in the very next operation** if you need to style that element.
+
+**Correct Pattern**:
+```javascript
+// 1. Create element
+create_text("Chart Title") 
+  → Returns: { id: "17:351" }
+
+// 2. Immediately use the returned ID
+set_fill_color(nodeId: "17:351", color: {...})
+```
+
+**Incorrect Pattern**:
+```javascript
+// ❌ Assuming or hard-coding IDs
+create_text("Chart Title")
+set_fill_color(nodeId: "16:351", color: {...}) // Wrong ID!
+```
+
+### Process Improvement: Node ID Checklist
+
+When creating and styling elements via TalkToFigma, follow this process:
+
+1. ✅ **Create element** → Capture returned node ID
+2. ✅ **Check the returned ID** in the response before proceeding
+3. ✅ **Use the exact returned ID** for any styling operations
+4. ✅ **Verify results** - if colors/properties don't apply, check if IDs match
+5. ✅ **When rebuilding elements**, expect new IDs - never reuse old IDs
+
+**Visual Checklist**:
+```
+CREATE → GET ID → USE ID → VERIFY
+   ↓        ↓        ↓        ↓
+ 17:351   capture  apply   check result
+```
+
+### Key Learnings
+
+1. **Node IDs are dynamic** - They change each time elements are created/deleted
+2. **Never assume sequential IDs** - Even if creating elements in order, IDs may skip numbers
+3. **Batch operations require careful tracking** - Each creation returns its own ID
+4. **Failed operations don't always error** - Styling a non-existent node may fail silently
+5. **Verification is critical** - Always check that colors/properties were actually applied
+
+### Impact on Chart 1 Fix
+
+**Problem**: Text was invisible (wrong colors)  
+**Diagnosis**: Used old node IDs (16:xxx) instead of new ones (17:xxx)  
+**Solution**: 
+- Scanned Chart 1 to get current node IDs
+- Applied correct text colors to all 14 text elements
+- Verified each color application succeeded
+
+**Result**: All text now properly visible with correct color hierarchy.
+
+### Documentation Added
+
+This node ID management process is now part of our standard workflow for any TalkToFigma operations and should be referenced whenever programmatically creating Figma elements.
+
+---
+
 ## Reflection
 
 ### What Went Well
@@ -512,16 +749,19 @@ This project now demonstrates:
 - Solid documentation structure
 - Successful Vega proof of concept
 - Design tokens workflow streamlined with JSON
+- Rapid learning and adaptation to Figma API quirks
 
 ### Technical Challenges Solved
 - Vega vs Vega-Lite decision
 - TalkToFigma connection setup
 - Figma API coordinate system understanding
+- Node ID management in programmatic creation
 
 ### Areas for Improvement
 - Consider screenshot documentation of Figma work
 - May need more interaction pattern examples
 - Should test Vega charts with real-world data volumes
+- Create visual process diagrams for TalkToFigma workflows
 
 ### Portfolio Value
 This journal itself demonstrates:
@@ -529,6 +769,7 @@ This journal itself demonstrates:
 - Technical problem-solving (Figma API quirks)
 - Ability to navigate ambiguity
 - Cross-domain knowledge (design + code)
+- Learning from mistakes and documenting solutions
 
 ---
 
