@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Status Timeline (Health Bands) | Operational Data Graphics</title>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0D0D0E;
+      color: #D9D9E0;
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: #D9D9E0;
+    }
+    
+    p {
+      color: #999AA6;
+      margin-bottom: 2rem;
+    }
+    
+    #vis {
+      background: #171719;
+      border: 1px solid #33353A;
+      border-radius: 8px;
+      padding: 2rem;
+    }
+    
+    a {
+      color: #3B82F5;
+      text-decoration: none;
+      margin-top: 2rem;
+    }
+    
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>System Health Timeline</h1>
+  <p>Service availability and health status over a 24-hour period</p>
+  
+  <div id="vis"></div>
+  
+  <a href="index.html">← Back to all charts</a>
+
+  <script>
+    const spec = {
+      "$schema": "https://vega.github.io/schema/vega/v5.json",
+      "description": "Status timeline showing system health bands over time",
+      "width": 800,
+      "height": 300,
+      "padding": {"top": 10, "left": 60, "right": 20, "bottom": 40},
+      "background": "#171719",
+      
+      "data": [
+        {
+          "name": "table",
+          "values": [
+            // Auth Service timeline
+            {"service": "Auth Service", "start": 0, "end": 6, "status": "Healthy", "serviceOrder": 0},
+            {"service": "Auth Service", "start": 6, "end": 14, "status": "Warning", "serviceOrder": 0},
+            {"service": "Auth Service", "start": 14, "end": 24, "status": "Healthy", "serviceOrder": 0},
+            
+            // API Gateway timeline
+            {"service": "API Gateway", "start": 0, "end": 10, "status": "Healthy", "serviceOrder": 1},
+            {"service": "API Gateway", "start": 10, "end": 24, "status": "Healthy", "serviceOrder": 1},
+            
+            // Database timeline
+            {"service": "Database", "start": 0, "end": 6, "status": "Healthy", "serviceOrder": 2},
+            {"service": "Database", "start": 6, "end": 10, "status": "Warning", "serviceOrder": 2},
+            {"service": "Database", "start": 10, "end": 13, "status": "Error", "serviceOrder": 2},
+            {"service": "Database", "start": 13, "end": 24, "status": "Healthy", "serviceOrder": 2}
+          ]
+        }
+      ],
+      
+      "scales": [
+        {
+          "name": "x",
+          "type": "linear",
+          "domain": [0, 24],
+          "range": "width",
+          "zero": true,
+          "nice": false
+        },
+        {
+          "name": "y",
+          "type": "band",
+          "domain": {"data": "table", "field": "service", "sort": {"field": "serviceOrder"}},
+          "range": "height",
+          "padding": 0.3
+        },
+        {
+          "name": "color",
+          "type": "ordinal",
+          "domain": ["Healthy", "Warning", "Error"],
+          "range": ["#22BF4A", "#F28500", "#CC3D3D"]
+        }
+      ],
+      
+      "axes": [
+        {
+          "orient": "top",
+          "scale": "x",
+          "labelColor": "#999AA6",
+          "labelFontSize": 11,
+          "labelFont": "Inter, sans-serif",
+          "labelPadding": 8,
+          "tickColor": "#999AA6",
+          "tickSize": 5,
+          "domain": false,
+          "grid": false,
+          "title": null,
+          "format": "d",
+          "values": [0, 6, 12, 18, 24],
+          "labelExpr": "datum.value + 'h'"
+        },
+        {
+          "orient": "left",
+          "scale": "y",
+          "labelColor": "#D9D9E0",
+          "labelFontSize": 12,
+          "labelFont": "Inter, sans-serif",
+          "labelPadding": 8,
+          "tickSize": 0,
+          "domain": false,
+          "grid": false,
+          "title": null
+        }
+      ],
+      
+      "marks": [
+        {
+          "type": "rect",
+          "from": {"data": "table"},
+          "encode": {
+            "enter": {
+              "x": {"scale": "x", "field": "start"},
+              "x2": {"scale": "x", "field": "end"},
+              "y": {"scale": "y", "field": "service"},
+              "height": {"scale": "y", "band": 1},
+              "fill": {"scale": "color", "field": "status"},
+              "fillOpacity": {"value": 0.85},
+              "cornerRadius": {"value": 3}
+            },
+            "update": {
+              "fillOpacity": {"value": 0.85},
+              "stroke": {"value": null},
+              "strokeWidth": {"value": 0}
+            },
+            "hover": {
+              "fillOpacity": {"value": 1},
+              "stroke": {"value": "#FFFFFF"},
+              "strokeWidth": {"value": 1}
+            }
+          }
+        },
+        {
+          "type": "text",
+          "from": {"data": "table"},
+          "encode": {
+            "enter": {
+              "x": {"signal": "(scale('x', datum.start) + scale('x', datum.end)) / 2"},
+              "y": {"scale": "y", "field": "service", "band": 0.5},
+              "text": {"signal": "datum.status + ' (' + (datum.end - datum.start) + 'h)'"},
+              "align": {"value": "center"},
+              "baseline": {"value": "middle"},
+              "fill": {"value": "#0D0D0E"},
+              "font": {"value": "Inter, sans-serif"},
+              "fontSize": {"value": 11},
+              "fontWeight": {"value": 600},
+              "opacity": {"value": 0}
+            },
+            "update": {
+              "opacity": [
+                {"test": "(datum.end - datum.start) >= 4", "value": 0.9},
+                {"value": 0}
+              ]
+            }
+          }
+        }
+      ],
+      
+      "legends": [
+        {
+          "fill": "color",
+          "title": null,
+          "orient": "bottom",
+          "direction": "horizontal",
+          "symbolType": "square",
+          "symbolSize": 100,
+          "symbolStrokeWidth": 0,
+          "symbolOffset": 8,
+          "labelColor": "#D9D9E0",
+          "labelFont": "Inter, sans-serif",
+          "labelFontSize": 11,
+          "labelOffset": 8,
+          "offset": 10,
+          "padding": 10
+        }
+      ],
+      
+      "title": {
+        "text": "System Health Timeline",
+        "anchor": "start",
+        "font": "Inter, sans-serif",
+        "fontSize": 16,
+        "fontWeight": 500,
+        "color": "#D9D9E0",
+        "offset": 20
+      }
+    };
+
+    vegaEmbed('#vis', spec, {
+      actions: false,
+      tooltip: {
+        theme: 'dark'
+      }
+    });
+  </script>
+</body>
+</html>

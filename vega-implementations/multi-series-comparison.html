@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multi-Series Comparison Line Chart | Operational Data Graphics</title>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0D0D0E;
+      color: #D9D9E0;
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: #D9D9E0;
+    }
+    
+    p {
+      color: #999AA6;
+      margin-bottom: 2rem;
+    }
+    
+    #vis {
+      background: #171719;
+      border: 1px solid #33353A;
+      border-radius: 8px;
+      padding: 2rem;
+    }
+    
+    a {
+      color: #3B82F5;
+      text-decoration: none;
+      margin-top: 2rem;
+    }
+    
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>Multi-Series Comparison Line Chart</h1>
+  <p>Comparing request volume across different services over time</p>
+  
+  <div id="vis"></div>
+  
+  <a href="index.html">← Back to all charts</a>
+
+  <script>
+    const spec = {
+      "$schema": "https://vega.github.io/schema/vega/v5.json",
+      "description": "Multi-series comparison line chart showing request volume by service",
+      "width": 800,
+      "height": 400,
+      "padding": {"top": 10, "left": 60, "right": 20, "bottom": 40},
+      "background": "#171719",
+      
+      "data": [
+        {
+          "name": "table",
+          "values": [
+            {"day": "Mon", "service": "Auth", "requests": 1800},
+            {"day": "Mon", "service": "API", "requests": 3200},
+            {"day": "Mon", "service": "Database", "requests": 2500},
+            {"day": "Mon", "service": "Cache", "requests": 800},
+            
+            {"day": "Tue", "service": "Auth", "requests": 1750},
+            {"day": "Tue", "service": "API", "requests": 3150},
+            {"day": "Tue", "service": "Database", "requests": 2450},
+            {"day": "Tue", "service": "Cache", "requests": 750},
+            
+            {"day": "Wed", "service": "Auth", "requests": 1900},
+            {"day": "Wed", "service": "API", "requests": 3300},
+            {"day": "Wed", "service": "Database", "requests": 2600},
+            {"day": "Wed", "service": "Cache", "requests": 850},
+            
+            {"day": "Thu", "service": "Auth", "requests": 1850},
+            {"day": "Thu", "service": "API", "requests": 3250},
+            {"day": "Thu", "service": "Database", "requests": 2550},
+            {"day": "Thu", "service": "Cache", "requests": 825},
+            
+            {"day": "Fri", "service": "Auth", "requests": 1700},
+            {"day": "Fri", "service": "API", "requests": 3100},
+            {"day": "Fri", "service": "Database", "requests": 2400},
+            {"day": "Fri", "service": "Cache", "requests": 700},
+            
+            {"day": "Sat", "service": "Auth", "requests": 1600},
+            {"day": "Sat", "service": "API", "requests": 3000},
+            {"day": "Sat", "service": "Database", "requests": 2300},
+            {"day": "Sat", "service": "Cache", "requests": 650},
+            
+            {"day": "Sun", "service": "Auth", "requests": 1650},
+            {"day": "Sun", "service": "API", "requests": 3050},
+            {"day": "Sun", "service": "Database", "requests": 2350},
+            {"day": "Sun", "service": "Cache", "requests": 675}
+          ],
+          "transform": [
+            {
+              "type": "formula",
+              "as": "dayOrder",
+              "expr": "indexof(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], datum.day)"
+            }
+          ]
+        }
+      ],
+      
+      "scales": [
+        {
+          "name": "x",
+          "type": "point",
+          "domain": {"data": "table", "field": "day", "sort": {"field": "dayOrder"}},
+          "range": "width",
+          "padding": 0.5
+        },
+        {
+          "name": "y",
+          "type": "linear",
+          "domain": [0, 4000],
+          "range": "height",
+          "nice": false,
+          "zero": true
+        },
+        {
+          "name": "color",
+          "type": "ordinal",
+          "domain": ["Auth", "API", "Database", "Cache"],
+          "range": ["#3B82F5", "#10BB82", "#F59F0A", "#8B5CF6"]
+        }
+      ],
+      
+      "axes": [
+        {
+          "orient": "bottom",
+          "scale": "x",
+          "labelColor": "#999AA6",
+          "labelFontSize": 11,
+          "labelFont": "Inter, sans-serif",
+          "labelPadding": 8,
+          "tickColor": "#999AA6",
+          "tickSize": 5,
+          "domain": true,
+          "domainColor": "#999AA6",
+          "domainWidth": 2,
+          "grid": false,
+          "title": null
+        },
+        {
+          "orient": "left",
+          "scale": "y",
+          "labelColor": "#999AA6",
+          "labelFontSize": 11,
+          "labelFont": "Inter, sans-serif",
+          "labelPadding": 8,
+          "tickColor": "#999AA6",
+          "tickSize": 5,
+          "domain": true,
+          "domainColor": "#999AA6",
+          "domainWidth": 2,
+          "grid": true,
+          "gridColor": "#33353A",
+          "gridOpacity": 0.4,
+          "title": "requests/sec",
+          "titleColor": "#999AA6",
+          "titleFont": "Inter, sans-serif",
+          "titleFontSize": 12,
+          "titleFontWeight": "normal",
+          "titlePadding": 15,
+          "format": "~s",
+          "tickCount": 5
+        }
+      ],
+      
+      "marks": [
+        {
+          "type": "group",
+          "from": {
+            "facet": {
+              "name": "series",
+              "data": "table",
+              "groupby": "service"
+            }
+          },
+          "marks": [
+            {
+              "type": "line",
+              "from": {"data": "series"},
+              "encode": {
+                "enter": {
+                  "x": {"scale": "x", "field": "day"},
+                  "y": {"scale": "y", "field": "requests"},
+                  "stroke": {"scale": "color", "field": "service"},
+                  "strokeWidth": {"value": 3},
+                  "strokeOpacity": {"value": 0.9}
+                },
+                "update": {
+                  "strokeOpacity": {"value": 0.9}
+                },
+                "hover": {
+                  "strokeOpacity": {"value": 1}
+                }
+              }
+            },
+            {
+              "type": "symbol",
+              "from": {"data": "series"},
+              "encode": {
+                "enter": {
+                  "x": {"scale": "x", "field": "day"},
+                  "y": {"scale": "y", "field": "requests"},
+                  "fill": {"scale": "color", "field": "service"},
+                  "size": {"value": 50},
+                  "fillOpacity": {"value": 0}
+                },
+                "update": {
+                  "fillOpacity": {"value": 0}
+                },
+                "hover": {
+                  "fillOpacity": {"value": 1}
+                }
+              }
+            }
+          ]
+        }
+      ],
+      
+      "legends": [
+        {
+          "stroke": "color",
+          "title": null,
+          "orient": "bottom",
+          "offset": 20,
+          "encode": {
+            "symbols": {
+              "enter": {
+                "strokeWidth": {"value": 3},
+                "size": {"value": 100}
+              }
+            },
+            "labels": {
+              "enter": {
+                "fill": {"value": "#D9D9E0"},
+                "font": {"value": "Inter, sans-serif"},
+                "fontSize": {"value": 11}
+              }
+            }
+          },
+          "direction": "horizontal",
+          "labelOffset": 8,
+          "symbolOffset": 8
+        }
+      ],
+      
+      "title": {
+        "text": "Request Volume by Service",
+        "anchor": "start",
+        "font": "Inter, sans-serif",
+        "fontSize": 16,
+        "fontWeight": 500,
+        "color": "#D9D9E0",
+        "offset": 20
+      }
+    };
+
+    vegaEmbed('#vis', spec, {
+      actions: false,
+      tooltip: {
+        theme: 'dark'
+      }
+    });
+  </script>
+</body>
+</html>

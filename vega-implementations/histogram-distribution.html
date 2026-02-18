@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Histogram / Distribution | Operational Data Graphics</title>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0D0D0E;
+      color: #D9D9E0;
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: #D9D9E0;
+    }
+    
+    p {
+      color: #999AA6;
+      margin-bottom: 2rem;
+    }
+    
+    #vis {
+      background: #171719;
+      border: 1px solid #33353A;
+      border-radius: 8px;
+      padding: 2rem;
+    }
+    
+    a {
+      color: #3B82F5;
+      text-decoration: none;
+      margin-top: 2rem;
+    }
+    
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>Query Response Time Distribution</h1>
+  <p>Histogram showing frequency distribution of response times</p>
+  
+  <div id="vis"></div>
+  
+  <a href="index.html">← Back to all charts</a>
+
+  <script>
+    const spec = {
+      "$schema": "https://vega.github.io/schema/vega/v5.json",
+      "description": "Histogram showing distribution of query response times",
+      "width": 800,
+      "height": 400,
+      "padding": {"top": 10, "left": 60, "right": 20, "bottom": 40},
+      "background": "#171719",
+      
+      "data": [
+        {
+          "name": "table",
+          "values": [
+            {"bin": "0-50", "binStart": 0, "binEnd": 50, "count": 850, "order": 0},
+            {"bin": "50-100", "binStart": 50, "binEnd": 100, "count": 1850, "order": 1},
+            {"bin": "100-150", "binStart": 100, "binEnd": 150, "count": 3200, "order": 2},
+            {"bin": "150-200", "binStart": 150, "binEnd": 200, "count": 2300, "order": 3},
+            {"bin": "200+", "binStart": 200, "binEnd": 250, "count": 1400, "order": 4}
+          ]
+        }
+      ],
+      
+      "scales": [
+        {
+          "name": "x",
+          "type": "band",
+          "domain": {"data": "table", "field": "bin", "sort": {"field": "order"}},
+          "range": "width",
+          "padding": 0.05
+        },
+        {
+          "name": "y",
+          "type": "linear",
+          "domain": [0, 4000],
+          "range": "height",
+          "nice": false,
+          "zero": true
+        }
+      ],
+      
+      "axes": [
+        {
+          "orient": "bottom",
+          "scale": "x",
+          "labelColor": "#999AA6",
+          "labelFontSize": 11,
+          "labelFont": "Inter, sans-serif",
+          "labelPadding": 8,
+          "tickColor": "#999AA6",
+          "tickSize": 5,
+          "domain": true,
+          "domainColor": "#999AA6",
+          "domainWidth": 2,
+          "grid": false,
+          "title": "Response Time (ms)",
+          "titleColor": "#999AA6",
+          "titleFont": "Inter, sans-serif",
+          "titleFontSize": 12,
+          "titleFontWeight": "normal",
+          "titlePadding": 15
+        },
+        {
+          "orient": "left",
+          "scale": "y",
+          "labelColor": "#999AA6",
+          "labelFontSize": 11,
+          "labelFont": "Inter, sans-serif",
+          "labelPadding": 8,
+          "tickColor": "#999AA6",
+          "tickSize": 5,
+          "domain": true,
+          "domainColor": "#999AA6",
+          "domainWidth": 2,
+          "grid": true,
+          "gridColor": "#33353A",
+          "gridOpacity": 0.4,
+          "title": "count",
+          "titleColor": "#999AA6",
+          "titleFont": "Inter, sans-serif",
+          "titleFontSize": 12,
+          "titleFontWeight": "normal",
+          "titlePadding": 15,
+          "format": "~s",
+          "tickCount": 5
+        }
+      ],
+      
+      "marks": [
+        {
+          "type": "rect",
+          "from": {"data": "table"},
+          "encode": {
+            "enter": {
+              "x": {"scale": "x", "field": "bin"},
+              "width": {"scale": "x", "band": 1},
+              "y": {"scale": "y", "field": "count"},
+              "y2": {"scale": "y", "value": 0},
+              "fill": {"value": "#3B82F5"},
+              "fillOpacity": {"value": 0.85},
+              "cornerRadiusTopLeft": {"value": 2},
+              "cornerRadiusTopRight": {"value": 2}
+            },
+            "update": {
+              "fillOpacity": {"value": 0.85}
+            },
+            "hover": {
+              "fillOpacity": {"value": 1}
+            }
+          }
+        },
+        {
+          "type": "text",
+          "from": {"data": "table"},
+          "encode": {
+            "enter": {
+              "x": {"scale": "x", "field": "bin", "band": 0.5},
+              "y": {"scale": "y", "field": "count", "offset": -8},
+              "text": {"signal": "format(datum.count, ',')"},
+              "align": {"value": "center"},
+              "baseline": {"value": "bottom"},
+              "fill": {"value": "#999AA6"},
+              "font": {"value": "Inter, sans-serif"},
+              "fontSize": {"value": 11},
+              "fontWeight": {"value": "normal"},
+              "opacity": {"value": 0}
+            },
+            "update": {
+              "opacity": {"value": 0}
+            },
+            "hover": {
+              "opacity": {"value": 1}
+            }
+          }
+        }
+      ],
+      
+      "title": {
+        "text": "Query Response Time Distribution",
+        "anchor": "start",
+        "font": "Inter, sans-serif",
+        "fontSize": 16,
+        "fontWeight": 500,
+        "color": "#D9D9E0",
+        "offset": 20
+      }
+    };
+
+    vegaEmbed('#vis', spec, {
+      actions: false,
+      tooltip: {
+        theme: 'dark'
+      }
+    });
+  </script>
+</body>
+</html>
