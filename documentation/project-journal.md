@@ -250,6 +250,261 @@ Added coordinate system findings to internal notes. This knowledge is critical f
 
 ---
 
+## Session 2: Week 2 - Chart Primitives Design
+**Date**: February 17, 2026
+
+### Overview
+
+Successfully completed the design phase for all 6 core chart types in Figma using programmatic creation via TalkToFigma. All charts now have visual mockups showing structure, styling, axes, legends, and data representations.
+
+### Chart Designs Completed
+
+#### 1. High-Density Time-Series Line Chart ✅
+**Purpose**: Track one or more metrics over time with high precision
+
+**Features Created**:
+- Title: "API Latency (p50, p95, p99)"
+- Y-axis with labels (0, 100, 200, 300, 400 ms)
+- X-axis with time labels (00:00, 06:00, 12:00, 18:00)
+- Horizontal grid lines (subtle, 40% opacity)
+- 3 colored line series representing p50, p95, p99
+- Legend with colored indicators (blue, cyan, violet)
+- Proper axis styling and typography
+
+**Design Decisions**:
+- Used semi-transparent lines (90% opacity) for depth
+- Grid lines very subtle to not compete with data
+- Legend positioned top-right for easy reference
+
+#### 2. Multi-Series Comparison Line Chart ✅
+**Purpose**: Compare different entities (services) over time
+
+**Features Created**:
+- Title: "Request Volume by Service"
+- Y-axis labels in thousands (0, 1k, 2k, 3k, 4k)
+- X-axis with day labels (Mon, Wed, Fri, Sun)
+- 4 colored line series: Auth, API, Database, Cache
+- Legend with 4 service names
+- Color palette: blue, green, orange, violet
+
+**Design Decisions**:
+- Used distinct colors from our categorical palette
+- Each service clearly differentiated
+- Horizontal layout for multi-day comparison
+
+#### 3. Stacked Area Trend ✅
+**Purpose**: Show cumulative composition breakdown over time
+
+**Features Created**:
+- Title: "Resource Usage Over Time"
+- Y-axis in percentages (0%, 25%, 50%, 75%, 100%)
+- 4 stacked layers: CPU, Memory, Disk, Network
+- Semi-transparent fills (70% opacity) showing stacking
+- Horizontal legend showing all 4 resources
+- Clear visual hierarchy of layers
+
+**Design Decisions**:
+- Lower opacity to show stacking relationships
+- Color order from bottom-up matches legend left-right
+- Percentage scale emphasizes this is cumulative
+
+#### 4. Histogram / Distribution ✅
+**Purpose**: Show frequency distribution across ranges
+
+**Features Created**:
+- Title: "Response Time Distribution"
+- Y-axis: count
+- X-axis: response time in ms (50, 150, 250, 350)
+- 8 vertical bars showing distribution curve
+- Normal distribution shape (peaks in middle)
+- Bar heights create recognizable bell curve
+
+**Design Decisions**:
+- Bars touch each other (no gaps) to show continuous range
+- Used single color (blue) since categories are ranges, not distinct types
+- Peak positioned in middle to show typical latency pattern
+
+#### 5. Throughput Bar Comparison ✅
+**Purpose**: Compare discrete categories on a single metric
+
+**Features Created**:
+- Title: "Endpoint Throughput Comparison"
+- X-axis: requests/sec
+- Y-axis: 5 endpoint labels (/api/users, /api/posts, /api/auth, /api/search, /api/metrics)
+- Horizontal bars of varying lengths
+- Clear ranking from highest to lowest
+
+**Design Decisions**:
+- Horizontal orientation for better label readability
+- Single color since comparing same metric across categories
+- Bar lengths clearly show magnitude differences
+
+#### 6. Status Timeline (Health Bands) ✅
+**Purpose**: Show health/availability status over time
+
+**Features Created**:
+- Title: "Service Health Status"
+- X-axis: Time (Last 24 hours)
+- Y-axis: 4 service names (API, Database, Cache, Auth)
+- Colored horizontal bands showing status over time:
+  - Green: Healthy
+  - Yellow/Orange: Degraded
+  - Red: Down
+- Legend showing status color meanings
+- Segments show state duration
+
+**Design Decisions**:
+- Used status colors (green, orange, red) from our palette
+- Semi-transparent fills (70%) for subtle appearance
+- Different patterns for each service showing various incident scenarios
+- Cache shows healthy → down → healthy to demonstrate incident
+- Database shows healthy → degraded to show partial outage
+
+### Documentation Created
+
+#### interaction-patterns.md ✅
+Comprehensive interaction and motion standards including:
+- Hover/focus states (crosshairs, tooltips, dimming)
+- Zoom & pan behavior (scroll wheel, click-drag, keyboard)
+- Data updates & live refresh (append mode, smooth transitions)
+- Selection & filtering (legend interactions, ESC to clear)
+- Threshold crossings & alerts (subtle pulse, color changes)
+- Motion timing system (instant, fast, standard, deliberate)
+- Accessibility standards (keyboard nav, screen readers, reduced motion)
+- Anti-patterns to avoid
+- Implementation checklist
+
+**Key Principles Documented**:
+- Motion must serve a purpose, not decoration
+- Interactions should reinforce stability
+- Respect `prefers-reduced-motion`
+- Provide consistent timing across all charts
+
+#### chart-usage-guidelines.md ✅
+Detailed guide for choosing the right chart type including:
+- Decision tree for chart selection
+- For each chart type:
+  - Purpose statement
+  - Best use cases
+  - When to use ✅
+  - When NOT to use ❌
+  - Data requirements
+  - Example use cases
+- Quick reference table comparing all 6 charts
+- Guidance for choosing between similar chart types
+- Anti-patterns to avoid (pie charts, 3D, dual Y-axes)
+- Accessibility considerations
+
+**Strategic Value**:
+This document positions the project as a complete design system, not just visual mockups. It demonstrates senior-level thinking about:
+- Context-appropriate chart selection
+- Understanding of data types and their visual representation
+- User needs and cognitive load
+- Design system evangelization
+
+### Technical Process
+
+**Programmatic Figma Creation**:
+- Used TalkToFigma API to create all chart elements
+- Successfully applied coordinate system knowledge from Week 1
+- Created ~270+ Figma elements across 6 charts
+- Consistent styling using our color system throughout
+
+**Challenges & Solutions**:
+- Maintained absolute coordinate calculations for all elements
+- Applied proper color palette consistently
+- Created legends with auto-layout frames for flexibility
+- Used semi-transparent fills for stacking/layering effects
+
+### Design System Consistency
+
+All 6 charts use:
+- **Dark mode background**: `#171719`
+- **Frame borders**: `#33353A` 
+- **Axis colors**: `rgba(0.6, 0.62, 0.66, 1)`
+- **Grid lines**: `rgba(0.2, 0.21, 0.23, 0.4)`
+- **Text colors**: 
+  - Primary: `rgba(0.85, 0.85, 0.88, 1)`
+  - Secondary: `rgba(0.6, 0.62, 0.66, 1)`
+- **Categorical colors**: Blue, Green/Cyan, Orange, Violet
+- **Status colors**: Green (healthy), Orange (degraded), Red (down)
+- **Typography**: Inter font, 10-14px sizes
+- **Spacing**: Consistent padding and margins
+
+---
+
+## Current Status: Week 2 Complete ✅
+
+### Completed Deliverables
+
+- [x] Chart Primitives page created in Figma
+- [x] All 6 chart types designed with full visual specifications
+- [x] Interaction & motion standards documented
+- [x] Chart usage guidelines written
+- [x] Design system consistency maintained across all charts
+- [x] Accessibility considerations documented
+
+### Metrics
+
+- **Figma elements created**: ~270+
+- **Documentation pages**: 2 (interaction-patterns, chart-usage-guidelines)
+- **Charts designed**: 6/6
+- **Total documentation files**: 13
+
+### Next Steps
+
+**Week 3 Focus**: Implementation
+- Implement 4 of the 6 charts in Vega
+- Suggested priority:
+  1. Multi-series comparison (builds on existing time-series)
+  2. Histogram / distribution (new pattern)
+  3. Status timeline (unique interaction model)
+  4. Stacked area or bar comparison (choose one)
+
+**Why These 4**:
+- Demonstrates variety of chart types
+- Shows different data structures and transforms
+- Covers most common operational use cases
+- Balances complexity vs portfolio value
+
+---
+
+## Week 2 Reflection
+
+### What Went Well
+- Rapid iteration using TalkToFigma for bulk creation
+- Consistent visual language across all 6 charts
+- Comprehensive documentation demonstrates senior-level thinking
+- Successfully applied Week 1 coordinate system learnings
+- Chart variety shows breadth of design thinking
+
+### Technical Achievements
+- Mastered programmatic Figma creation at scale
+- Created complex layouts with proper hierarchy
+- Applied color system consistently
+- Demonstrated understanding of chart grammar
+
+### Design Decisions
+- Semi-transparent fills for layering effects
+- Subtle grid lines that don't compete with data
+- Legends positioned for optimal readability
+- Color choices reinforce semantic meaning (status colors)
+
+### Portfolio Differentiators
+This project now demonstrates:
+- **Systems thinking**: Not just charts, but a complete framework
+- **Design + documentation**: Senior designers can evangelize systems
+- **Implementation credibility**: Ready to build in Week 3
+- **Depth of expertise**: Interaction patterns and usage guidelines show mastery
+
+### Areas for Future Enhancement
+- Could add more complex interaction examples
+- Might create Figma components for reusability
+- Could document animation curves with examples
+- Screenshot documentation of Figma work for case study
+
+---
+
 ## Reflection
 
 ### What Went Well
