@@ -155,24 +155,60 @@ function updateChartsTheme(theme) {
 
 ### Default Theme
 
-- **Default:** Light mode
-- **Rationale:** Most accessible for majority of users
+- **Default:** System preference (auto-detected)
+- **Fallback:** Light mode (if system preference unavailable)
+- **Rationale:** Respects user's OS-level preference for better UX
 
 ### Saving Preferences
 
 Theme preference is saved to `localStorage`:
 - Persists across browser sessions
 - Per-domain storage
-- Falls back to light mode if no preference saved
+- Falls back to system preference if no explicit preference saved
 
-### Loading Saved Theme
+### System Preference Detection
+
+The system automatically detects the user's OS-level dark mode preference:
+
+```javascript
+function getSystemTheme() {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+```
+
+### Loading Theme Priority
+
+1. **Explicit user choice** (saved in localStorage) - highest priority
+2. **System preference** (`prefers-color-scheme`) - if no saved preference
+3. **Light mode** - fallback if system preference unavailable
 
 ```javascript
 window.addEventListener('DOMContentLoaded', () => {
-  const savedTheme = localStorage.getItem('theme') || 'light';
-  setTheme(savedTheme);
+  const savedTheme = localStorage.getItem('theme');
+  const systemTheme = getSystemTheme();
+  
+  // Use saved preference if exists, otherwise use system preference
+  const initialTheme = savedTheme || systemTheme;
+  setTheme(initialTheme);
 });
 ```
+
+### Dynamic System Theme Changes
+
+The theme automatically updates if the user changes their OS theme (only if no explicit preference saved):
+
+```javascript
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+  // Only auto-switch if user hasn't explicitly set a preference
+  if (!localStorage.getItem('theme')) {
+    setTheme(e.matches ? 'dark' : 'light');
+  }
+});
+```
+
+This means:
+- If user clicks the theme toggle → preference saved, stays fixed
+- If user never clicks toggle → follows OS changes automatically
 
 ---
 
@@ -226,14 +262,6 @@ Users who prefer reduced motion should see instant theme changes:
 }
 ```
 
-### System Preference Detection
-
-Future enhancement: Detect system theme preference:
-
-```javascript
-const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-const defaultTheme = prefersDark ? 'dark' : 'light';
-```
 
 ---
 
@@ -341,9 +369,9 @@ The `tokens-with-modes.json` file includes both light and dark mode values:
 
 ## Future Enhancements
 
-1. **Auto-detect system preference** on first visit
-2. **Respect `prefers-color-scheme` media query**
-3. **Add "Auto" option** (follows system)
+1. ~~**Auto-detect system preference** on first visit~~ ✅ **Implemented**
+2. ~~**Respect `prefers-color-scheme` media query**~~ ✅ **Implemented**
+3. **Add "Auto" option** (explicit toggle to follow system)
 4. **Print styles** (force light mode for printing)
 5. **Export theme with SVG** downloads
 
@@ -360,7 +388,7 @@ The `tokens-with-modes.json` file includes both light and dark mode values:
 - ✅ User experience design (saving preferences)
 
 **Interview Talking Point:**
-> "I implemented a complete theming system with light and dark modes. It uses CSS custom properties for instant switching, updates all Vega charts dynamically, and saves user preference to localStorage. The design tokens are structured to support both modes in Figma, so the entire system—from design to code—is theme-aware."
+> "I implemented a complete theming system with light and dark modes. It automatically detects the user's system preference using `prefers-color-scheme`, but respects explicit user choices saved to localStorage. The system also listens for OS-level theme changes and adapts in real-time—unless the user has set a manual preference. It uses CSS custom properties for instant switching, updates all Vega charts dynamically, and the design tokens support both modes in Figma, so the entire system—from design to code—is theme-aware."
 
 ---
 

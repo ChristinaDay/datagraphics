@@ -994,7 +994,7 @@
     // THEME SWITCHING
     // ========================================
     
-    // Set initial theme (default to light)
+    // Set initial theme
     let currentTheme = 'light';
     
     function setTheme(theme) {
@@ -1011,6 +1011,11 @@
       
       // Update all charts with new theme
       updateChartsTheme(theme);
+    }
+    
+    function getSystemTheme() {
+      // Detect user's system preference
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     }
     
     function updateChartsTheme(theme) {
@@ -1065,10 +1070,22 @@
       vegaEmbed('#vis6', spec6, { actions: false, tooltip: { theme: theme === 'dark' ? 'dark' : 'light' } });
     }
     
-    // Load saved theme on page load
+    // Load theme on page load (prioritize saved preference, then system preference)
     window.addEventListener('DOMContentLoaded', () => {
-      const savedTheme = localStorage.getItem('theme') || 'light';
-      setTheme(savedTheme);
+      const savedTheme = localStorage.getItem('theme');
+      const systemTheme = getSystemTheme();
+      
+      // Use saved preference if exists, otherwise use system preference
+      const initialTheme = savedTheme || systemTheme;
+      setTheme(initialTheme);
+    });
+    
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      // Only auto-switch if user hasn't explicitly set a preference
+      if (!localStorage.getItem('theme')) {
+        setTheme(e.matches ? 'dark' : 'light');
+      }
     });
 
     // ========================================
