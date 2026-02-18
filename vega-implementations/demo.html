@@ -134,6 +134,103 @@
       padding: 2rem;
     }
     
+    /* Simulation Controls */
+    .simulation-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding: 12px 16px;
+      background: rgba(59, 130, 245, 0.1);
+      border: 1px solid rgba(59, 130, 245, 0.3);
+      border-radius: 6px;
+    }
+    
+    .sim-button {
+      background: #3B82F5;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .sim-button:hover {
+      background: #2563eb;
+    }
+    
+    .sim-button:disabled {
+      background: #4D4E56;
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+    
+    .sim-button.pause {
+      background: #F28500;
+    }
+    
+    .sim-button.pause:hover {
+      background: #d97706;
+    }
+    
+    .sim-button.reset {
+      background: #6b7280;
+    }
+    
+    .sim-button.reset:hover {
+      background: #4b5563;
+    }
+    
+    .sim-status {
+      color: #999AA6;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .sim-status.active {
+      color: #22BF4A;
+    }
+    
+    .sim-status .pulse {
+      width: 8px;
+      height: 8px;
+      background: #22BF4A;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    
+    .alert-message {
+      padding: 10px 14px;
+      background: rgba(204, 61, 61, 0.15);
+      border: 1px solid rgba(204, 61, 61, 0.4);
+      border-radius: 4px;
+      color: #CC3D3D;
+      font-size: 13px;
+      margin-top: 12px;
+      display: none;
+    }
+    
+    .alert-message.show {
+      display: block;
+      animation: slideIn 0.3s ease;
+    }
+    
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
     /* Footer */
     footer {
       max-width: 1400px;
@@ -197,6 +294,9 @@
         High-signal, low-noise data graphics designed for operational monitoring. 
         Built with full Vega to demonstrate systems-level design thinking and implementation credibility.
       </p>
+      <p style="margin-top: 16px; color: #3B82F5; font-weight: 500;">
+        ▶ Interactive: Click "Simulate" buttons to see how charts handle real-time operational data updates
+      </p>
     </div>
 
     <!-- Chart 1 -->
@@ -207,6 +307,15 @@
         <p>Continuous metric trends over time with minimal visual noise. Perfect for CPU, memory, and latency monitoring.</p>
       </div>
       <div class="chart-container">
+        <div class="simulation-controls">
+          <button class="sim-button" onclick="startSimulation1()" id="start-btn-1">▶ Simulate Live Updates</button>
+          <button class="sim-button pause" onclick="pauseSimulation1()" id="pause-btn-1" disabled>⏸ Pause</button>
+          <button class="sim-button reset" onclick="resetSimulation1()" id="reset-btn-1">↺ Reset</button>
+          <div class="sim-status" id="status-1">
+            Ready to simulate real-time metrics
+          </div>
+        </div>
+        <div class="alert-message" id="alert-1"></div>
         <div id="vis1"></div>
       </div>
     </section>
@@ -219,6 +328,15 @@
         <p>Compare 2-5 related metrics simultaneously. Ideal for environment comparison, regional metrics, and service health.</p>
       </div>
       <div class="chart-container">
+        <div class="simulation-controls">
+          <button class="sim-button" onclick="startSimulation2()" id="start-btn-2">▶ Simulate Traffic Spike</button>
+          <button class="sim-button pause" onclick="pauseSimulation2()" id="pause-btn-2" disabled>⏸ Pause</button>
+          <button class="sim-button reset" onclick="resetSimulation2()" id="reset-btn-2">↺ Reset</button>
+          <div class="sim-status" id="status-2">
+            Ready to simulate traffic patterns
+          </div>
+        </div>
+        <div class="alert-message" id="alert-2"></div>
         <div id="vis2"></div>
       </div>
     </section>
@@ -231,6 +349,15 @@
         <p>Frequency distribution of continuous variables. Shows latency percentiles, request sizes, and error patterns.</p>
       </div>
       <div class="chart-container">
+        <div class="simulation-controls">
+          <button class="sim-button" onclick="startSimulation4()" id="start-btn-4">▶ Simulate Degradation</button>
+          <button class="sim-button pause" onclick="pauseSimulation4()" id="pause-btn-4" disabled>⏸ Pause</button>
+          <button class="sim-button reset" onclick="resetSimulation4()" id="reset-btn-4">↺ Reset</button>
+          <div class="sim-status" id="status-4">
+            Ready to simulate performance degradation
+          </div>
+        </div>
+        <div class="alert-message" id="alert-4"></div>
         <div id="vis4"></div>
       </div>
     </section>
@@ -243,6 +370,15 @@
         <p>System health states over time. Visualizes service uptime, incident timelines, and deployment status.</p>
       </div>
       <div class="chart-container">
+        <div class="simulation-controls">
+          <button class="sim-button" onclick="startSimulation6()" id="start-btn-6">▶ Simulate Incident</button>
+          <button class="sim-button pause" onclick="pauseSimulation6()" id="pause-btn-6" disabled>⏸ Pause</button>
+          <button class="sim-button reset" onclick="resetSimulation6()" id="reset-btn-6">↺ Reset</button>
+          <div class="sim-status" id="status-6">
+            Ready to simulate service incident
+          </div>
+        </div>
+        <div class="alert-message" id="alert-6"></div>
         <div id="vis6"></div>
       </div>
     </section>
@@ -786,6 +922,293 @@
         }
       });
     });
+
+    // ========================================
+    // SIMULATION FUNCTIONS
+    // ========================================
+
+    // Global simulation state
+    let intervals = {};
+    
+    // Helper functions
+    function updateStatus(chartId, message, isActive = false) {
+      const status = document.getElementById(`status-${chartId}`);
+      status.textContent = message;
+      status.className = isActive ? 'sim-status active' : 'sim-status';
+      if (isActive) {
+        status.innerHTML = '<span class="pulse"></span>' + message;
+      }
+    }
+
+    function showAlert(chartId, message) {
+      const alert = document.getElementById(`alert-${chartId}`);
+      alert.textContent = message;
+      alert.className = 'alert-message show';
+      setTimeout(() => alert.className = 'alert-message', 5000);
+    }
+
+    function toggleButtons(chartId, isRunning) {
+      document.getElementById(`start-btn-${chartId}`).disabled = isRunning;
+      document.getElementById(`pause-btn-${chartId}`).disabled = !isRunning;
+    }
+
+    // ========================================
+    // CHART 1: Time-Series Line Chart
+    // ========================================
+    
+    let chart1Data = [...spec1.data[0].values];
+    const chart1Initial = JSON.parse(JSON.stringify(chart1Data));
+    
+    function startSimulation1() {
+      toggleButtons(1, true);
+      updateStatus(1, 'Streaming live metrics...', true);
+      
+      let iteration = 0;
+      intervals.chart1 = setInterval(() => {
+        iteration++;
+        
+        // Generate new data point with realistic variation
+        const lastValue = chart1Data[chart1Data.length - 1].value;
+        const newValue = Math.max(40, Math.min(100, lastValue + (Math.random() - 0.5) * 15));
+        
+        // Add new point
+        chart1Data.push({
+          time: `T+${iteration}`,
+          value: newValue,
+          series: "Production"
+        });
+        
+        // Keep sliding window of 13 points
+        if (chart1Data.length > 13) {
+          chart1Data.shift();
+        }
+        
+        // Update spec and re-render
+        spec1.data[0].values = chart1Data;
+        vegaEmbed('#vis1', spec1, { actions: false, tooltip: { theme: 'dark' } });
+        
+        // Check threshold
+        if (newValue > 90) {
+          showAlert(1, '⚠️ CPU usage exceeded 90% threshold!');
+        }
+      }, 1500);
+    }
+
+    function pauseSimulation1() {
+      clearInterval(intervals.chart1);
+      toggleButtons(1, false);
+      updateStatus(1, 'Simulation paused');
+    }
+
+    function resetSimulation1() {
+      clearInterval(intervals.chart1);
+      chart1Data = JSON.parse(JSON.stringify(chart1Initial));
+      spec1.data[0].values = chart1Data;
+      vegaEmbed('#vis1', spec1, { actions: false, tooltip: { theme: 'dark' } });
+      toggleButtons(1, false);
+      updateStatus(1, 'Ready to simulate real-time metrics');
+      document.getElementById('alert-1').className = 'alert-message';
+    }
+
+    // ========================================
+    // CHART 2: Multi-Series Comparison
+    // ========================================
+    
+    let chart2Data = [...spec2.data[0].values];
+    const chart2Initial = JSON.parse(JSON.stringify(chart2Data));
+    
+    function startSimulation2() {
+      toggleButtons(2, true);
+      updateStatus(2, 'Simulating traffic spike...', true);
+      
+      let iteration = 0;
+      intervals.chart2 = setInterval(() => {
+        iteration++;
+        
+        // Simulate traffic spike - all environments increase, but Production fastest
+        chart2Data = chart2Data.map(row => ({
+          ...row,
+          Production: Math.min(4000, row.Production + Math.random() * 150 + 100),
+          Staging: Math.min(2500, row.Staging + Math.random() * 80 + 50),
+          Development: Math.min(1200, row.Development + Math.random() * 40 + 20)
+        }));
+        
+        spec2.data[0].values = chart2Data;
+        vegaEmbed('#vis2', spec2, { actions: false, tooltip: { theme: 'dark' } });
+        
+        // Check if Production is significantly higher
+        const lastRow = chart2Data[chart2Data.length - 1];
+        if (lastRow.Production > 3000) {
+          showAlert(2, '🔥 Production traffic spike detected: ' + Math.round(lastRow.Production) + ' req/sec');
+        }
+        
+        // Stop after spike completes
+        if (iteration >= 8) {
+          pauseSimulation2();
+          updateStatus(2, 'Traffic spike simulation complete');
+        }
+      }, 800);
+    }
+
+    function pauseSimulation2() {
+      clearInterval(intervals.chart2);
+      toggleButtons(2, false);
+      updateStatus(2, 'Simulation paused');
+    }
+
+    function resetSimulation2() {
+      clearInterval(intervals.chart2);
+      chart2Data = JSON.parse(JSON.stringify(chart2Initial));
+      spec2.data[0].values = chart2Data;
+      vegaEmbed('#vis2', spec2, { actions: false, tooltip: { theme: 'dark' } });
+      toggleButtons(2, false);
+      updateStatus(2, 'Ready to simulate traffic patterns');
+      document.getElementById('alert-2').className = 'alert-message';
+    }
+
+    // ========================================
+    // CHART 4: Histogram Distribution
+    // ========================================
+    
+    let chart4Data = [...spec4.data[0].values];
+    const chart4Initial = JSON.parse(JSON.stringify(chart4Data));
+    
+    function startSimulation4() {
+      toggleButtons(4, true);
+      updateStatus(4, 'Simulating performance degradation...', true);
+      
+      let iteration = 0;
+      intervals.chart4 = setInterval(() => {
+        iteration++;
+        
+        // Shift distribution rightward (higher latency)
+        chart4Data = chart4Data.map((bin, idx) => {
+          // Decrease left bins, increase right bins
+          let change = (idx - 2) * 150; // Middle bin stays same, left decrease, right increase
+          return {
+            ...bin,
+            count: Math.max(100, bin.count + change + (Math.random() - 0.5) * 100)
+          };
+        });
+        
+        spec4.data[0].values = chart4Data;
+        vegaEmbed('#vis4', spec4, { actions: false, tooltip: { theme: 'dark' } });
+        
+        // Calculate median (approximate)
+        const rightHeavy = chart4Data[3].count + chart4Data[4].count;
+        const total = chart4Data.reduce((sum, bin) => sum + bin.count, 0);
+        if (rightHeavy / total > 0.4) {
+          showAlert(4, '⚠️ Response time degradation detected: Median shifted to 150-200ms range');
+        }
+        
+        // Stop after degradation is visible
+        if (iteration >= 6) {
+          pauseSimulation4();
+          updateStatus(4, 'Degradation simulation complete');
+        }
+      }, 1000);
+    }
+
+    function pauseSimulation4() {
+      clearInterval(intervals.chart4);
+      toggleButtons(4, false);
+      updateStatus(4, 'Simulation paused');
+    }
+
+    function resetSimulation4() {
+      clearInterval(intervals.chart4);
+      chart4Data = JSON.parse(JSON.stringify(chart4Initial));
+      spec4.data[0].values = chart4Data;
+      vegaEmbed('#vis4', spec4, { actions: false, tooltip: { theme: 'dark' } });
+      toggleButtons(4, false);
+      updateStatus(4, 'Ready to simulate performance degradation');
+      document.getElementById('alert-4').className = 'alert-message';
+    }
+
+    // ========================================
+    // CHART 6: Status Timeline
+    // ========================================
+    
+    let chart6Data = [...spec6.data[0].values];
+    const chart6Initial = JSON.parse(JSON.stringify(chart6Data));
+    
+    function startSimulation6() {
+      toggleButtons(6, true);
+      updateStatus(6, 'Simulating cascading incident...', true);
+      
+      let step = 0;
+      intervals.chart6 = setInterval(() => {
+        step++;
+        
+        if (step === 1) {
+          // Database goes to error
+          chart6Data = chart6Data.map(item => {
+            if (item.service === 'Database' && item.start === 6) {
+              return {...item, status: 'Error'};
+            }
+            return item;
+          });
+          showAlert(6, '🔴 Database service entered error state');
+        }
+        else if (step === 2) {
+          // Auth service goes to warning
+          chart6Data = chart6Data.map(item => {
+            if (item.service === 'Auth Service' && item.start === 6) {
+              return {...item, status: 'Warning'};
+            }
+            return item;
+          });
+          showAlert(6, '🟡 Auth Service degraded (cascading failure)');
+        }
+        else if (step === 4) {
+          // Services start recovering
+          chart6Data = chart6Data.map(item => {
+            if (item.service === 'Database' && item.start === 6) {
+              return {...item, status: 'Warning', end: 13};
+            }
+            if (item.service === 'Database' && item.start === 13) {
+              return {...item, status: 'Healthy'};
+            }
+            return item;
+          });
+          showAlert(6, '🟢 Database recovering...');
+        }
+        else if (step === 5) {
+          // Full recovery
+          chart6Data = chart6Data.map(item => {
+            if (item.service === 'Auth Service' && item.start === 6) {
+              return {...item, status: 'Healthy'};
+            }
+            if (item.service === 'Database' && item.start === 6) {
+              return {...item, status: 'Healthy'};
+            }
+            return item;
+          });
+          showAlert(6, '✅ All services healthy - incident resolved');
+          pauseSimulation6();
+          updateStatus(6, 'Incident simulation complete');
+        }
+        
+        spec6.data[0].values = chart6Data;
+        vegaEmbed('#vis6', spec6, { actions: false, tooltip: { theme: 'dark' } });
+      }, 2000);
+    }
+
+    function pauseSimulation6() {
+      clearInterval(intervals.chart6);
+      toggleButtons(6, false);
+      updateStatus(6, 'Simulation paused');
+    }
+
+    function resetSimulation6() {
+      clearInterval(intervals.chart6);
+      chart6Data = JSON.parse(JSON.stringify(chart6Initial));
+      spec6.data[0].values = chart6Data;
+      vegaEmbed('#vis6', spec6, { actions: false, tooltip: { theme: 'dark' } });
+      toggleButtons(6, false);
+      updateStatus(6, 'Ready to simulate service incident');
+      document.getElementById('alert-6').className = 'alert-message';
+    }
   </script>
 </body>
 </html>
