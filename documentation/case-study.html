@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Study: Operational Data Graphics | Christina Day</title>
+    <style>
+        :root {
+            --color-bg: #ffffff;
+            --color-text: #1a1a1a;
+            --color-text-secondary: #666666;
+            --color-border: #e0e0e0;
+            --color-accent: #0066cc;
+            --color-code-bg: #f5f5f5;
+            --spacing-unit: 4px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --color-bg: #0d0d0d;
+                --color-text: #e6e6e6;
+                --color-text-secondary: #999999;
+                --color-border: #262626;
+                --color-accent: #4d94ff;
+                --color-code-bg: #1a1a1a;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+            background: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: calc(var(--spacing-unit) * 15) calc(var(--spacing-unit) * 5);
+        }
+
+        header {
+            margin-bottom: calc(var(--spacing-unit) * 12);
+            padding-bottom: calc(var(--spacing-unit) * 8);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: calc(var(--spacing-unit) * 2);
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--color-text-secondary);
+            margin-bottom: calc(var(--spacing-unit) * 6);
+        }
+
+        .meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: calc(var(--spacing-unit) * 4);
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: calc(var(--spacing-unit) * 2);
+        }
+
+        .meta-label {
+            font-weight: 600;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-top: calc(var(--spacing-unit) * 12);
+            margin-bottom: calc(var(--spacing-unit) * 4);
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: calc(var(--spacing-unit) * 8);
+            margin-bottom: calc(var(--spacing-unit) * 3);
+        }
+
+        p {
+            margin-bottom: calc(var(--spacing-unit) * 4);
+            color: var(--color-text);
+        }
+
+        strong {
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        ul, ol {
+            margin-left: calc(var(--spacing-unit) * 5);
+            margin-bottom: calc(var(--spacing-unit) * 4);
+        }
+
+        li {
+            margin-bottom: calc(var(--spacing-unit) * 2);
+        }
+
+        code {
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            background: var(--color-code-bg);
+            padding: calc(var(--spacing-unit) * 0.5) calc(var(--spacing-unit) * 1.5);
+            border-radius: calc(var(--spacing-unit) * 1);
+            font-size: 0.9em;
+        }
+
+        .highlight-box {
+            background: var(--color-code-bg);
+            border-left: 3px solid var(--color-accent);
+            padding: calc(var(--spacing-unit) * 4) calc(var(--spacing-unit) * 5);
+            margin: calc(var(--spacing-unit) * 6) 0;
+            border-radius: calc(var(--spacing-unit) * 1);
+        }
+
+        .highlight-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .section {
+            margin-bottom: calc(var(--spacing-unit) * 10);
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--color-border);
+            margin: calc(var(--spacing-unit) * 12) 0;
+        }
+
+        .image-placeholder {
+            background: var(--color-code-bg);
+            border: 1px dashed var(--color-border);
+            padding: calc(var(--spacing-unit) * 10);
+            text-align: center;
+            color: var(--color-text-secondary);
+            margin: calc(var(--spacing-unit) * 6) 0;
+            border-radius: calc(var(--spacing-unit) * 2);
+        }
+
+        .cta {
+            background: var(--color-accent);
+            color: white;
+            padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 6);
+            border-radius: calc(var(--spacing-unit) * 2);
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+            margin-top: calc(var(--spacing-unit) * 4);
+            transition: opacity 0.2s;
+        }
+
+        .cta:hover {
+            opacity: 0.9;
+        }
+
+        .link-group {
+            display: flex;
+            gap: calc(var(--spacing-unit) * 4);
+            margin-top: calc(var(--spacing-unit) * 6);
+        }
+
+        footer {
+            margin-top: calc(var(--spacing-unit) * 15);
+            padding-top: calc(var(--spacing-unit) * 8);
+            border-top: 1px solid var(--color-border);
+            text-align: center;
+            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+        }
+
+        a {
+            color: var(--color-accent);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: calc(var(--spacing-unit) * 10) calc(var(--spacing-unit) * 4);
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .meta {
+                flex-direction: column;
+                gap: calc(var(--spacing-unit) * 2);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Operational Data Graphics</h1>
+            <p class="subtitle">A Modern Visualization System for Data Infrastructure</p>
+            
+            <div class="meta">
+                <div class="meta-item">
+                    <span class="meta-label">Role:</span>
+                    <span>Design Systems Designer / Design Engineer</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Timeline:</span>
+                    <span>February 2026 (4 weeks)</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Tools:</span>
+                    <span>Figma, Vega, JavaScript, HTML/CSS</span>
+                </div>
+            </div>
+
+            <div class="link-group">
+                <a href="https://github.com/ChristinaDay/datagraphics" class="cta">View on GitHub</a>
+                <a href="../vega-implementations/demo.html" class="cta">Live Demo</a>
+            </div>
+        </header>
+
+        <section class="section">
+            <h2>Overview</h2>
+            <p>I designed and implemented a complete data visualization system specifically for operational monitoring—targeting data engineers, analytics engineers, and infrastructure teams who need high-signal, low-noise graphics for real-time metrics, system health, and performance monitoring.</p>
+            
+            <p>This project demonstrates systems-level design thinking, from defining visual foundations and interaction patterns to implementing production-ready charts with full Vega and building an interactive demo with real-time simulations.</p>
+
+            <div class="highlight-box">
+                <strong>Key Achievement:</strong> Built a complete design system in 4 weeks—from design tokens and Figma variables to interactive Vega implementations with light/dark mode theming.
+            </div>
+
+            <div class="image-placeholder">
+                [Screenshot: Demo page showing all 4 charts with dark mode]
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <section class="section">
+            <h2>The Problem</h2>
+            <h3>Generic BI Tools Don't Fit Operational Workflows</h3>
+            
+            <p>Most dashboards use business intelligence aesthetics—decorative elements, saturated colors, excessive whitespace. These designs prioritize executive presentations over operational workflows.</p>
+
+            <p><strong>Engineers monitoring production systems need:</strong></p>
+            <ul>
+                <li>High information density (scan patterns quickly)</li>
+                <li>Minimal visual noise (focus on anomalies)</li>
+                <li>Semantic color (only for status/meaning, not decoration)</li>
+                <li>Dark mode by default (terminal-first workflows)</li>
+                <li>Precise, functional design over visual flair</li>
+            </ul>
+
+            <p><strong>The gap:</strong> No standardized visual grammar exists for operational graphics. Teams cobble together charts from generic libraries, resulting in inconsistent, inefficient monitoring interfaces.</p>
+        </section>
+
+        <div class="divider"></div>
+
+        <section class="section">
+            <h2>My Approach</h2>
+            <h3>Position as a Design System, Not a Library</h3>
+
+            <p><strong>Strategic Decision:</strong> Instead of building "another chart library," I positioned this as a <strong>visual grammar</strong> + <strong>implementation proof</strong> demonstrating:</p>
+
+            <ol>
+                <li><strong>Systems thinking</strong> - Define primitives that compose</li>
+                <li><strong>Design + code credibility</strong> - Both Figma designs and working implementations</li>
+                <li><strong>Theoretical foundation</strong> - Based on Grammar of Graphics (Leland Wilkinson)</li>
+                <li><strong>Audience specificity</strong> - Designed for operational users, not generic BI</li>
+            </ol>
+
+            <p><strong>Why Vega?</strong> Chose full Vega (not Vega-Lite) to demonstrate technical depth and precise control over every visual element—critical for design systems work.</p>
+        </section>
+
+        <div class="divider"></div>
+
+        <section class="section">
+            <h2>Design Process</h2>
+
+            <h3>Week 1: Foundations</h3>
+            <p><strong>Established visual language:</strong></p>
+            <ul>
+                <li><strong>Color system:</strong> Categorical, status, sequential, diverging palettes</li>
+                <li><strong>Typography:</strong> Inter for UI, JetBrains Mono for metrics</li>
+                <li><strong>Spacing:</strong> 4px base unit, documented scale</li>
+                <li><strong>Axis standards:</strong> Grid opacity, tick spacing, label hierarchy</li>
+            </ul>
+
+            <p><strong>Created design tokens</strong> (<code>tokens.json</code>) following W3C format for Figma import via Tokens Studio plugin.</p>
+
+            <div class="highlight-box">
+                <strong>Key Decision:</strong> Dark mode first. Operational teams work in terminals and dark UIs—designing for light mode first would have felt forced.
+            </div>
+
+            <div class="image-placeholder">
+                [Screenshot: Figma showing color variables, spacing system, typography styles]
+            </div>
+
+            <h3>Week 2: Chart Primitives</h3>
+            <p><strong>Designed 6 core chart types in Figma:</strong></p>
+            <ol>
+                <li><strong>High-Density Time-Series Line</strong> - CPU, memory, latency trends</li>
+                <li><strong>Multi-Series Comparison Line</strong> - Environment/region comparison</li>
+                <li><strong>Stacked Area Trend</strong> - Resource allocation, composition over time</li>
+                <li><strong>Histogram / Distribution</strong> - Latency percentiles, response time patterns</li>
+                <li><strong>Throughput Bar Comparison</strong> - Endpoint/service volume ranking</li>
+                <li><strong>Status Timeline (Health Bands)</strong> - Service uptime, incident timelines</li>
+            </ol>
+
+            <p><strong>Documented for each:</strong> When to use / when NOT to use, data structure requirements, interaction patterns, accessibility considerations.</p>
+
+            <div class="highlight-box">
+                <strong>Challenge:</strong> Initial programmatic creation placed elements outside frame bounds due to Figma API coordinate system quirks. <strong>Solution:</strong> Diagnosed absolute vs. relative coordinate handling, documented the fix, rebuilt all charts with proper positioning.
+            </div>
+
+            <div class="image-placeholder">
+                [Screenshot: All 6 chart primitives in Figma with annotations]
+            </div>
+
+            <h3>Week 3: Implementation</h3>
+            <p><strong>Implemented 4 of 6 charts in full Vega:</strong></p>
+
+            <p><strong>Technical approach:</strong></p>
+            <ul>
+                <li>JSON specifications (~500 lines each)</li>
+                <li>Declarative data transformations</li>
+                <li>Custom scales, axes, marks encoding</li>
+                <li>Dark mode styling, hover interactions</li>
+            </ul>
+
+            <p><strong>Charts built:</strong></p>
+            <ul>
+                <li>Chart 1: Time-Series Line (13 data points, smooth interpolation)</li>
+                <li>Chart 2: Multi-Series Comparison (faceted marks for 3 series)</li>
+                <li>Chart 4: Histogram (5 bins, bell curve distribution)</li>
+                <li>Chart 6: Status Timeline (health bands with conditional rendering)</li>
+            </ul>
+
+            <div class="highlight-box">
+                <strong>Critical Discovery:</strong> During implementation, caught spacing inconsistencies—charts used <code>padding: 5</code> instead of documented <code>{top: 10, left: 60, right: 20, bottom: 40}</code>. Systematically audited and fixed all 5 files, applying proper <code>labelPadding: 8px</code>, <code>symbolOffset: 8px</code>, etc. <strong>This taught me:</strong> Design systems only work when implementation matches documentation exactly.
+            </div>
+
+            <p><strong>Created unified demo page</strong> with all 4 charts, sticky navigation, smooth scrolling, and jump links—portfolio-ready showcase.</p>
+
+            <div class="image-placeholder">
+                [Screenshot: Demo page with sticky nav and all 4 charts]
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <section class="section">
+            <h2>Interactive Enhancements</h2>
+
+            <h3>Real-Time Simulation Feature</h3>
+            <p>Added <strong>"Simulate"</strong> buttons to demonstrate how charts handle operational scenarios:</p>
+
+            <ul>
+                <li><strong>Chart 1:</strong> Live metric streaming (new data points every 1.5s) - Sliding window visualization - Threshold alerts when CPU > 90%</li>
+                <li><strong>Chart 2:</strong> Traffic spike simulation - All environments increase, Production fastest - Shows scale differences under load</li>
+                <li><strong>Chart 4:</strong> Performance degradation - Distribution shifts right (higher latency) - Visualizes how issues appear in histograms</li>
+                <li><strong>Chart 6:</strong> Cascading incident - Database fails → Auth degrades → Full recovery - 5-step incident timeline over 10 seconds</li>
+            </ul>
+
+            <div class="highlight-box">
+                <strong>Why this matters:</strong> Most visualization portfolios are static. Interactive simulations prove understanding of real operational workflows and demonstrate Vega's reactive capabilities.
+            </div>
+
+            <div class="image-placeholder">
+                [GIF: Chart 6 simulation showing cascading incident]
+            </div>
+
+            <h3>Light/Dark Mode Theming</h3>
+            <p><strong>Built complete theming system:</strong></p>
+            <ul>
+                <li>CSS custom properties (50+ variables)</li>
+                <li>Auto-detects OS preference (<code>prefers-color-scheme</code>)</li>
+                <li>Saves user choice to localStorage</li>
+                <li>Updates all Vega charts dynamically</li>
+                <li>Listens for OS theme changes in real-time</li>
+            </ul>
+
+            <p><strong>UX Flow:</strong></p>
+            <ol>
+                <li>First visit → Matches OS theme automatically</li>
+                <li>User clicks toggle → Saves preference, stays fixed</li>
+                <li>OS changes → Only updates if no saved preference</li>
+            </ol>
+
+            <div class="image-placeholder">
+                [Side-by-side: Same chart in dark and light mode]
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <section class="section">
+            <h2>Outcomes & Impact</h2>
+
+            <h3>Deliverables</h3>
+            <p><strong>Documentation (17 files):</strong></p>
+            <ul>
+                <li>Design thesis, project plan, grammar breakdown</li>
+                <li>Color system, spacing standards, axis specifications</li>
+                <li>Interaction patterns, chart usage guidelines</li>
+                <li>Theming system, Figma setup guide</li>
+            </ul>
+
+            <p><strong>Design Assets:</strong></p>
+            <ul>
+                <li>Complete Figma file with 6 chart primitives</li>
+                <li>Design tokens (W3C format) with mode support</li>
+                <li>Color variables, typography styles, spacing boards</li>
+            </ul>
+
+            <p><strong>Implementation (6 files):</strong></p>
+            <ul>
+                <li>4 Vega chart implementations (~2,000 lines)</li>
+                <li>Interactive demo with real-time simulations (~400 lines)</li>
+                <li>Unified showcase page with theming</li>
+            </ul>
+
+            <div class="highlight-box">
+                <strong>Portfolio Differentiators:</strong>
+                <ul style="margin-bottom: 0;">
+                    <li>Interactive (not static mockups)</li>
+                    <li>Complete system (not isolated components)</li>
+                    <li>Theory-grounded (Grammar of Graphics)</li>
+                    <li>Audience-specific (operational, not generic BI)</li>
+                </ul>
+            </div>
+
+            <h3>Technical Highlights</h3>
+            <p><strong>Full Vega Mastery:</strong></p>
+            <ul>
+                <li>Custom padding per side (not available in Vega-Lite)</li>
+                <li>Precise legend positioning and spacing</li>
+                <li>Conditional mark rendering (Chart 6 text labels)</li>
+                <li>Faceted data transformations (Chart 2 multi-series)</li>
+            </ul>
+
+            <p><strong>Design System Discipline:</strong></p>
+            <ul>
+                <li>Documented spacing standards → Implemented exactly</li>
+                <li>Caught and fixed inconsistencies systematically</li>
+                <li>Applied 8px label padding across all axes</li>
+                <li>Consistent 40% grid opacity throughout</li>
+            </ul>
+        </section>
+
+        <div class="divider"></div>
+
+        <section class="section">
+            <h2>Key Learnings</h2>
+
+            <h3>1. Design Systems Require Implementation Integrity</h3>
+            <p><strong>Challenge:</strong> Initially implemented charts with <code>padding: 5</code> instead of documented standards.</p>
+            <p><strong>Learning:</strong> Documentation is worthless if code doesn't match. When I caught this, I systematically audited all 5 files and applied proper spacing. <strong>Takeaway:</strong> Design systems demand discipline—every 8px matters.</p>
+
+            <h3>2. Audience Specificity Drives Design Decisions</h3>
+            <p><strong>Example:</strong> Grid lines over bars (not behind) in histograms.</p>
+            <p><strong>Rationale:</strong> Operational users need precise value estimation. 40% opacity ensures grids don't overpower data while serving their functional purpose.</p>
+            <p><strong>Takeaway:</strong> Generic "best practices" don't always apply. Understand your users' workflows.</p>
+
+            <h3>3. Theory + Practice = Credibility</h3>
+            <p><strong>Grammar of Graphics foundation</strong> demonstrated I understand visualization theory, not just tools. <strong>Vega implementation</strong> proved I can execute at a systems level.</p>
+            <p><strong>Takeaway:</strong> Senior roles require both. Design without implementation is incomplete; implementation without theory is shallow.</p>
+
+            <h3>4. Interactive > Static for Portfolios</h3>
+            <p><strong>Before simulations:</strong> Static charts (technically correct but not engaging).</p>
+            <p><strong>After simulations:</strong> Click "Simulate Incident" → watch cascading failure → memorable interview demo.</p>
+            <p><strong>Takeaway:</strong> Show, don't tell. Let hiring managers interact with your work.</p>
+        </section>
+
+        <div class="divider"></div>
+
+        <section class="section">
+            <h2>Reflection</h2>
+
+            <h3>What Went Well</h3>
+            <p><strong>Rapid iteration:</strong> Figma + TalkToFigma plugin enabled programmatic chart creation, speeding up Week 2.</p>
+            <p><strong>Documentation discipline:</strong> Writing design thesis first clarified audience, constraints, and principles—guiding every subsequent decision.</p>
+            <p><strong>Systematic problem-solving:</strong> When spacing inconsistencies appeared, I didn't patch—I audited the system and fixed the root cause.</p>
+
+            <h3>What I'd Do Differently</h3>
+            <p><strong>Earlier alignment check:</strong> Should have referenced <code>spacing-system.md</code> while writing initial Vega specs, not after completion.</p>
+            <p><strong>More user testing:</strong> Would test simulations with actual engineers to validate operational scenarios.</p>
+            <p><strong>Expand chart library:</strong> Implement Charts 3 & 5 to complete the full 6-chart set.</p>
+
+            <h3>Why This Project Matters</h3>
+            <p>This wasn't about building "another chart library." It was about demonstrating <strong>how I think about design systems:</strong></p>
+            <ul>
+                <li>Define primitives, not templates</li>
+                <li>Document standards, then enforce them</li>
+                <li>Design for specific users, not generic ones</li>
+                <li>Bridge design and engineering</li>
+                <li>Show theoretical depth + practical execution</li>
+            </ul>
+
+            <div class="highlight-box">
+                <strong>For companies like Fivetran, Datadog, or infrastructure-focused teams:</strong> This project proves I can define visual systems, implement them with precision, and understand operational workflows deeply enough to design for them.
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <section class="section">
+            <h2>Try It Yourself</h2>
+            
+            <div class="link-group">
+                <a href="../vega-implementations/demo.html" class="cta">View Interactive Demo</a>
+                <a href="https://github.com/ChristinaDay/datagraphics" class="cta">Explore on GitHub</a>
+            </div>
+
+            <p style="margin-top: 24px;"><strong>Explore:</strong></p>
+            <ul>
+                <li>Toggle between light/dark modes</li>
+                <li>Click "Simulate" buttons to see real-time updates</li>
+                <li>View all 4 charts with smooth interactions</li>
+                <li>Check the documentation and Figma designs</li>
+            </ul>
+        </section>
+
+        <footer>
+            <p>Project completed February 2026 | Christina Day</p>
+        </footer>
+    </div>
+</body>
+</html>
